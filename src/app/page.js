@@ -21,9 +21,24 @@ export default function Home() {
   const gridX = 11;
   const gridY = 7;
 
-  // const collisions = [
-  //   [-3.5,-2.5],
-  //   [-4.5,-2.5],
+  const collisions = [
+    [-4.5, -2.5],
+    [-3.5, -2.5],
+    [-2.5, -2.5],
+    [-1.5, -2.5],
+    [-0.5, -2.5],
+    [-4.5, 2.5],
+    [-3.5, 2.5],
+    [-4.5, 1.5],
+    [-3.5, 1.5],
+    [-3.5, 0.5],
+    [-4.5, 0.5],
+    [0.5, -0.5],
+    [3.5, -2.5],
+    [3.5, -1.5],
+    [2.5, -1.5],
+    [2.5, -2.5],
+  ];
 
   const changeOrientation = (direction) => {
     switch (direction) {
@@ -45,28 +60,42 @@ export default function Home() {
     (direction) => {
       console.log("Move", direction);
       setOrientation(changeOrientation(direction));
+      let newX = currX;
+      let newY = currY;
+
       switch (direction) {
         case 1:
           if (currY === limits.y[1]) return;
-          setCurrY(currY + 1);
+          newY = currY + 1;
           break;
         case 2:
           if (currY === limits.y[0]) return;
-          setCurrY(currY - 1);
+          newY = currY - 1;
           break;
         case 3:
           if (currX === limits.x[0]) return;
-          setCurrX(currX - 1);
+          newX = currX - 1;
           break;
         case 4:
           if (currX === limits.x[1]) return;
-          setCurrX(currX + 1);
+          newX = currX + 1;
           break;
         default:
           break;
       }
+
+      // Check if the new coordinates are in the collisions array
+      const isCollision = collisions.some(([x, y]) => x === newX && y === newY);
+
+      if (!isCollision) {
+        setCurrX(newX);
+        setCurrY(newY);
+        console.log(`New coordinates: [${newX}, ${newY}]`);
+      } else {
+        console.log("Cannot move to that position due to collision.");
+      }
     },
-    [currX, currY, limits.x, limits.y]
+    [currX, currY, limits.x, limits.y, collisions]
   );
 
   const handleInteract = useCallback(() => {
