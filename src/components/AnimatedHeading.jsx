@@ -2,8 +2,8 @@ import Typewriter from "typewriter-effect";
 
 export default function AnimatedHeading({ text }) {
   return (
-    <div className="flex flex-col items-center justify-center h-[20vh]">
-      <h1 className="text-4xl font-arcade">
+    <div className="flex flex-col items-center justify-center h-[20vh] m-2">
+      <h1 className="text-4xl font-arcade text-center">
         <Typewriter
           options={{
             strings: [

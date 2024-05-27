@@ -173,8 +173,8 @@ export default function GameCanvas() {
   }, [handleMove, handleInteract]);
 
   return (
-    <section className="flex h-auto w-full  ">
-      <div className="w-4 border-red-500">
+    <section className="flex h-full w-full  ">
+      <div className="m-2 p-2 w-full h-[50vh] md:h-[80vh] border-red-500">
         <Canvas camera={{ position: [5, 5, 8] }}>
           <OrbitControls enabled={true} />
           <Suspense fallback={null}>
@@ -183,7 +183,8 @@ export default function GameCanvas() {
           </Suspense>
         </Canvas>
       </div>
-      <div className="w-6">
+      <div className=" h-[40vh] md:hidden"></div>
+      {/* <div className="w-6">
         <button
           className="w-full h-12 bg-blue-500 text-white"
           onClick={() => {
@@ -223,7 +224,7 @@ export default function GameCanvas() {
         >
           Interact
         </button>
-      </div>
+      </div> */}
     </section>
   );
 }
