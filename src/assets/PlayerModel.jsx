@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useState } from "react";
 
@@ -11,6 +11,21 @@ export function PlayerModel(props) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF("/red_-_pokemon.glb");
   const { actions } = useAnimations(animations, group);
+  useEffect(() => {
+    const action = actions["rig|rigAction"];
+
+    if (action) {
+      action.time = 2.5; // Start the animation at 2.5 seconds
+
+      action.play();
+
+      setTimeout(() => {
+        action.stop(); // Stop the animation after 1 second
+        action.time = 2.5;
+      }, 200);
+    }
+  }, []);
+
   return (
     <group ref={group} {...props} dispose={null} scale={0.75}>
       <group name="Sketchfab_Scene">
