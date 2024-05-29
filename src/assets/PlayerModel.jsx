@@ -12,19 +12,23 @@ export function PlayerModel(props) {
   const { nodes, materials, animations } = useGLTF("/red_-_pokemon.glb");
   const { actions } = useAnimations(animations, group);
   useEffect(() => {
+    console.log("PlayerModel useEffect triggered");
     const action = actions["rig|rigAction"];
-
     if (action) {
-      action.time = 2.5; // Start the animation at 2.5 seconds
-
-      action.play();
-
-      setTimeout(() => {
-        action.stop(); // Stop the animation after 1 second
+      console.log("Action found:", action);
+      if (props.isMoving) {
+        console.log("Starting animation from 2.5 seconds");
+        action.reset();
         action.time = 2.5;
-      }, 200);
+        action.play();
+      } else {
+        console.log("Stopping animation");
+        action.stop();
+      }
+    } else {
+      console.log("No action found with name 'rig|rigAction'");
     }
-  }, []);
+  }, [props.isMoving, actions]);
 
   return (
     <group ref={group} {...props} dispose={null} scale={0.75}>

@@ -10,6 +10,7 @@ import { useCallback } from "react";
 export default function GameCanvas() {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
+  const [isMoving, setIsMoving] = useState(false);
 
   const limits = {
     x: [-4.5, 5.5],
@@ -120,6 +121,7 @@ export default function GameCanvas() {
       const isCollision = collisions.some(([x, y]) => x === newX && y === newY);
 
       if (!isCollision) {
+        setIsMoving(true);
         setCurrX(newX);
         setCurrY(newY);
         const interaction = checkInteractions(newX, newY);
@@ -128,8 +130,12 @@ export default function GameCanvas() {
         }
 
         console.log(`New coordinates: [${newX}, ${newY}]`);
+        setTimeout(() => {
+          setIsMoving(false);
+        }, 500); // Adjust the timeout value as needed
       } else {
         console.log("Cannot move to that position due to collision.");
+        setIsMoving(false);
       }
     },
     [currX, currY, limits.x, limits.y, collisions]
@@ -179,7 +185,11 @@ export default function GameCanvas() {
           <OrbitControls enabled={true} />
           <Suspense fallback={null}>
             <RoomModel />
-            <PlayerModel position={[currX, 0, currY]} rotation={orientation} />
+            <PlayerModel
+              isMoving={isMoving}
+              position={[currX, 0, currY]}
+              rotation={orientation}
+            />
           </Suspense>
         </Canvas>
       </div>
