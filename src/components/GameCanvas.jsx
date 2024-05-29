@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
 
+import { useSpring, a } from "@react-spring/three";
+
 export default function GameCanvas() {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
@@ -89,9 +91,17 @@ export default function GameCanvas() {
   };
 
   const [orientation, setOrientation] = useState([0, Math.PI, 0]); // 0 = [0,1], 1 = [1,0], 2 = [0,-1], 3 = [-1,0
+
+  const { pos, rot } = useSpring({
+    pos: [currX, 0, currY],
+    rot: orientation,
+    config: { duration: 500 },
+    loop: true,
+    rotate: orientation,
+  });
+
   const handleMove = useCallback(
     (direction) => {
-      console.log("Move", direction);
       setOrientation(changeOrientation(direction));
       let newX = currX;
       let newY = currY;
@@ -117,7 +127,6 @@ export default function GameCanvas() {
           break;
       }
 
-      // Check if the new coordinates are in the collisions array
       const isCollision = collisions.some(([x, y]) => x === newX && y === newY);
 
       if (!isCollision) {
@@ -128,11 +137,9 @@ export default function GameCanvas() {
         if (interaction) {
           console.log(`You can interact with the ${interaction.type}`);
         }
-
-        console.log(`New coordinates: [${newX}, ${newY}]`);
         setTimeout(() => {
           setIsMoving(false);
-        }, 500); // Adjust the timeout value as needed
+        }, 400);
       } else {
         console.log("Cannot move to that position due to collision.");
         setIsMoving(false);
@@ -185,11 +192,7 @@ export default function GameCanvas() {
           <OrbitControls enabled={true} />
           <Suspense fallback={null}>
             <RoomModel />
-            <PlayerModel
-              isMoving={isMoving}
-              position={[currX, 0, currY]}
-              rotation={orientation}
-            />
+            <PlayerModel isMoving={isMoving} position={pos} rotation={rot} />
           </Suspense>
         </Canvas>
       </div>

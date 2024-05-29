@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useState } from "react";
+import { a } from "@react-spring/three";
 
 export function PlayerModel(props) {
   const [x, setX] = useState(0);
@@ -12,26 +13,23 @@ export function PlayerModel(props) {
   const { nodes, materials, animations } = useGLTF("/red_-_pokemon.glb");
   const { actions } = useAnimations(animations, group);
   useEffect(() => {
-    console.log("PlayerModel useEffect triggered");
     const action = actions["rig|rigAction"];
     if (action) {
-      console.log("Action found:", action);
       if (props.isMoving) {
-        console.log("Starting animation from 2.5 seconds");
-        action.reset();
-        action.time = 2.5;
+        if (action.time < 2.5) {
+          action.reset();
+          action.time = 2.5;
+        }
         action.play();
       } else {
-        console.log("Stopping animation");
         action.stop();
       }
     } else {
-      console.log("No action found with name 'rig|rigAction'");
     }
   }, [props.isMoving, actions]);
 
   return (
-    <group ref={group} {...props} dispose={null} scale={0.75}>
+    <a.group ref={group} {...props} dispose={null} scale={0.75}>
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"
@@ -845,7 +843,7 @@ export function PlayerModel(props) {
           </group>
         </group>
       </group>
-    </group>
+    </a.group>
   );
 }
 
