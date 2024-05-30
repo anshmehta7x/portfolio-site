@@ -8,11 +8,16 @@ import { useState } from "react";
 import { useCallback } from "react";
 
 import { useSpring, a } from "@react-spring/three";
+import useSound from "use-sound";
+
+const collisionsound = "/sounds/collisionsound.mp3";
 
 export default function GameCanvas() {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
   const [isMoving, setIsMoving] = useState(false);
+
+  const [collisionSoundPlay] = useSound(collisionsound);
 
   const limits = {
     x: [-4.5, 5.5],
@@ -99,7 +104,6 @@ export default function GameCanvas() {
     loop: true,
     rotate: orientation,
   });
-
   const handleMove = useCallback(
     (direction) => {
       setOrientation(changeOrientation(direction));
@@ -108,23 +112,32 @@ export default function GameCanvas() {
 
       switch (direction) {
         case 1:
-          if (currY === limits.y[1]) return;
           newY = currY + 1;
           break;
         case 2:
-          if (currY === limits.y[0]) return;
           newY = currY - 1;
           break;
         case 3:
-          if (currX === limits.x[0]) return;
           newX = currX - 1;
           break;
         case 4:
-          if (currX === limits.x[1]) return;
           newX = currX + 1;
           break;
         default:
           break;
+      }
+
+      // Check if new position is within limits
+      if (
+        newX < limits.x[0] ||
+        newX > limits.x[1] ||
+        newY < limits.y[0] ||
+        newY > limits.y[1]
+      ) {
+        collisionSoundPlay();
+        console.log("Cannot move outside the limits.");
+        setIsMoving(false);
+        return;
       }
 
       const isCollision = collisions.some(([x, y]) => x === newX && y === newY);
@@ -141,6 +154,7 @@ export default function GameCanvas() {
           setIsMoving(false);
         }, 400);
       } else {
+        collisionSoundPlay();
         console.log("Cannot move to that position due to collision.");
         setIsMoving(false);
       }
