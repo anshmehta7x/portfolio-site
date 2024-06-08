@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
-
+import { useMemo } from "react";
 import { useSpring, a } from "@react-spring/three";
 import useSound from "use-sound";
 
@@ -16,6 +16,8 @@ export default function GameCanvas() {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
   const [isMoving, setIsMoving] = useState(false);
+  const [computerTint, setComputerTint] = useState(false);
+  const [interactionType, setInteractionType] = useState(null);
 
   const [collisionSoundPlay] = useSound(collisionsound);
 
@@ -87,12 +89,13 @@ export default function GameCanvas() {
   };
 
   const checkInteractions = (x, y) => {
-    //return the type of interaction if the player is in a position where an interaction is possible
-    return interactions.find((interaction) =>
+    const interaction = interactions.find((interaction) =>
       interaction.positions.some(
         (position) => position[0] === x && position[1] === y
       )
     );
+    console.log(interaction);
+    return interaction ? interaction.type : null;
   };
 
   const [orientation, setOrientation] = useState([0, Math.PI, 0]); // 0 = [0,1], 1 = [1,0], 2 = [0,-1], 3 = [-1,0
@@ -148,7 +151,9 @@ export default function GameCanvas() {
         setCurrY(newY);
         const interaction = checkInteractions(newX, newY);
         if (interaction) {
-          console.log(`You can interact with the ${interaction.type}`);
+          setInteractionType(interaction);
+        } else {
+          setInteractionType(null); // Reset interaction type when moving away from an interactable position
         }
         setTimeout(() => {
           setIsMoving(false);
@@ -163,8 +168,11 @@ export default function GameCanvas() {
   );
 
   const handleInteract = useCallback(() => {
-    console.log("Interact");
-  }, []);
+    if (interactionType) {
+      console.log(`Interacting with ${interactionType}`);
+      setInteractionType(null);
+    }
+  }, [interactionType]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -205,7 +213,10 @@ export default function GameCanvas() {
         <Canvas camera={{ position: [5, 5, 8] }}>
           <OrbitControls enabled={true} />
           <Suspense fallback={null}>
-            <RoomModel />
+            <RoomModel
+              interactions={interactions}
+              interactionType={interactionType}
+            />
             <PlayerModel isMoving={isMoving} position={pos} rotation={rot} />
           </Suspense>
         </Canvas>

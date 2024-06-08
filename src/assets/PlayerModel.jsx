@@ -34,7 +34,7 @@ export function PlayerModel(props) {
         <group
           name="Sketchfab_model"
           rotation={[-Math.PI / 2, 0, 0]}
-          scale={0.53}
+          scale={0.5}
         >
           <group
             name="1808ed5f499448fcba2eef1b748308dbfbx"
