@@ -11,7 +11,10 @@ import useSound from "use-sound";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
-export default function GameCanvas({ setAchievementsVisibility }) {
+export default function GameCanvas({
+  setAchievementsVisibility,
+  setResumeVisibility,
+}) {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
   const [isMoving, setIsMoving] = useState(false);
@@ -112,10 +115,13 @@ export default function GameCanvas({ setAchievementsVisibility }) {
       if (interactionType === "certificate") {
         // Toggle achievements visibility
         setAchievementsVisibility((prevVisibility) => !prevVisibility);
+      } else if (interactionType === "computer") {
+        // Toggle resume visibility
+        setResumeVisibility((prevVisibility) => !prevVisibility);
       }
       setInteractionType(null);
     }
-  }, [interactionType, setAchievementsVisibility]);
+  }, [interactionType, setAchievementsVisibility, setResumeVisibility]);
 
   const handleMove = useCallback(
     (direction) => {
