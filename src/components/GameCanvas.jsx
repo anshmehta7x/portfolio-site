@@ -6,13 +6,12 @@ import { Suspense } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
-import { useMemo } from "react";
 import { useSpring, a } from "@react-spring/three";
 import useSound from "use-sound";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
-export default function GameCanvas() {
+export default function GameCanvas({ setAchievementsVisibility }) {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
   const [isMoving, setIsMoving] = useState(false);
@@ -107,6 +106,17 @@ export default function GameCanvas() {
     loop: true,
     rotate: orientation,
   });
+  const handleInteract = useCallback(() => {
+    if (interactionType) {
+      console.log(`Interacting with ${interactionType}`);
+      if (interactionType === "certificate") {
+        // Toggle achievements visibility
+        setAchievementsVisibility((prevVisibility) => !prevVisibility);
+      }
+      setInteractionType(null);
+    }
+  }, [interactionType, setAchievementsVisibility]);
+
   const handleMove = useCallback(
     (direction) => {
       setOrientation(changeOrientation(direction));
@@ -130,7 +140,6 @@ export default function GameCanvas() {
           break;
       }
 
-      // Check if new position is within limits
       if (
         newX < limits.x[0] ||
         newX > limits.x[1] ||
@@ -155,6 +164,8 @@ export default function GameCanvas() {
         } else {
           setInteractionType(null); // Reset interaction type when moving away from an interactable position
         }
+        // Close achievements visibility when moving
+        setAchievementsVisibility(false);
         setTimeout(() => {
           setIsMoving(false);
         }, 400);
@@ -164,15 +175,8 @@ export default function GameCanvas() {
         setIsMoving(false);
       }
     },
-    [currX, currY, limits.x, limits.y, collisions]
+    [currX, currY, limits.x, limits.y, collisions, setAchievementsVisibility]
   );
-
-  const handleInteract = useCallback(() => {
-    if (interactionType) {
-      console.log(`Interacting with ${interactionType}`);
-      setInteractionType(null);
-    }
-  }, [interactionType]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
