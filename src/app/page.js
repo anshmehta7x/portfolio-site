@@ -6,10 +6,12 @@ import AchievementsModal from "@/components/AchievementsModal";
 import ResumeModal from "@/components/ResumeModal";
 
 import { useState } from "react";
+import SkillsModal from "@/components/SkillsModal";
 
 export default function Home() {
   const [achievementsVisibility, setAchievementsVisibility] = useState(false);
   const [resumeVisibility, setResumeVisibility] = useState(false);
+  const [skillsVisibility, setSkillsVisibility] = useState(false);
 
   return (
     <main className="w-screen h-screen flex flex-col bg-cyan-400">
@@ -17,6 +19,7 @@ export default function Home() {
       <GameCanvas
         setAchievementsVisibility={setAchievementsVisibility}
         setResumeVisibility={setResumeVisibility}
+        setSkillsVisibility={setSkillsVisibility}
       />
       <AchievementsModal
         visibility={achievementsVisibility}
@@ -28,6 +31,12 @@ export default function Home() {
         visibility={resumeVisibility}
         onClose={() => {
           setResumeVisibility(false);
+        }}
+      />
+      <SkillsModal
+        visibility={skillsVisibility}
+        onClose={() => {
+          setSkillsVisibility(false);
         }}
       />
     </main>

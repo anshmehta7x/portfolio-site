@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
-import { useSpring, a } from "@react-spring/three";
+import { useSpring } from "@react-spring/three";
 import useSound from "use-sound";
 
 const collisionsound = "/sounds/collisionsound.mp3";
@@ -14,6 +14,7 @@ const collisionsound = "/sounds/collisionsound.mp3";
 export default function GameCanvas({
   setAchievementsVisibility,
   setResumeVisibility,
+  setSkillsVisibility,
 }) {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
@@ -118,10 +119,17 @@ export default function GameCanvas({
       } else if (interactionType === "computer") {
         // Toggle resume visibility
         setResumeVisibility((prevVisibility) => !prevVisibility);
+      } else if (interactionType === "bookshelf") {
+        setSkillsVisibility((prevVisibility) => !prevVisibility);
       }
       setInteractionType(null);
     }
-  }, [interactionType, setAchievementsVisibility, setResumeVisibility]);
+  }, [
+    interactionType,
+    setAchievementsVisibility,
+    setResumeVisibility,
+    setSkillsVisibility,
+  ]);
 
   const handleMove = useCallback(
     (direction) => {
@@ -172,6 +180,8 @@ export default function GameCanvas({
         }
         // Close achievements visibility when moving
         setAchievementsVisibility(false);
+        setResumeVisibility(false);
+        setSkillsVisibility(false);
         setTimeout(() => {
           setIsMoving(false);
         }, 400);
