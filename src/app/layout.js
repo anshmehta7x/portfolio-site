@@ -11,10 +11,24 @@ const arcade = localFont({
   variable: "--arcade",
 });
 
+const pixeboy = localFont({
+  src: "fonts/pixeboy.ttf",
+  variable: "--pixeboy",
+});
+
+const bigpixel = localFont({
+  src: "fonts/bigpixel.ttf",
+  variable: "--bigpixel",
+});
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${arcade.variable}`}>{children}</body>
+      <body
+        className={`${arcade.variable} ${pixeboy.variable} ${bigpixel.variable}`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

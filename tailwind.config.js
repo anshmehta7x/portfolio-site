@@ -14,6 +14,8 @@ module.exports = {
       },
       fontFamily: {
         arcade: ["var(--arcade)"],
+        pixeboy: ["var(--pixeboy)"],
+        bigpixel: ["var(--bigpixel)"],
       },
     },
   },
