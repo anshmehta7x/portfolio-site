@@ -3,11 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --pixel-bg: lightblue; /* Inner background color */
-  --pixel-border: black; /* Inner border color: */
-  --pixel-border-2: white; /* Middle border color: */
-  --pixel-border-3: var(--pixel-border); /* Outer border color */
-  --pixel: 0.125rem; /* Pixel size */
+  --pixel-bg: #1e293b;
+  --pixel-border: #475569;
+  --pixel-border-2: #94a3b8;
+  --pixel-border-3: #0f172a;
+  --pixel: 0.125rem;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 .pixel-border {
