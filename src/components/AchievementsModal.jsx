@@ -1,4 +1,5 @@
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import { useState } from "react";
 
 const achievements = [
   {
@@ -52,6 +53,15 @@ const achievements = [
 ];
 
 export default function AchievementsModal({ visibility, onClose }) {
+  const [openItems, setOpenItems] = useState({});
+
+  const handleToggle = (index) => {
+    setOpenItems((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
   return (
     <section
       className={`${
@@ -85,17 +95,21 @@ export default function AchievementsModal({ visibility, onClose }) {
           </h1>
         </div>
         <div className="flex-grow overflow-auto px-[10vw] pb-8 scrollbar-hide">
-          <Accordion variant="splitted" showDivider={false}>
+          <Accordion variant="splitted" showDivider={false} hideIndicator>
             {achievements.map((achievement, index) => (
               <AccordionItem
                 key={index}
                 aria-label={achievement.title}
                 title={
+                  //animation ???
                   <span className="text-xl text-white font-bigpixel flex flex-row ">
+                    {openItems[index] ? "v  " : ">  "}
                     {achievement.title}
                   </span>
                 }
-                className="bg-slate-800 hover:bg-slate-600 transition-colors duration-200 mb-[5vh]" // Add margin-bottom for spacing
+                className="bg-slate-800 hover:bg-slate-600 transition-colors duration-200 mb-[5vh]"
+                onClick={() => handleToggle(index)}
+                // Add margin-bottom for spacing
               >
                 <p className="text-gray-300 p-4 font-bigpixel">
                   {achievement.description}
