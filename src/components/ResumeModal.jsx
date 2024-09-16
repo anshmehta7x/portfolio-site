@@ -36,7 +36,7 @@ export default function ResumeModal({ visibility, onClose }) {
           </svg>
         </button>
         <h1
-          className="text-white text-4xl font-arcade text-center mt-8 cursor-pointer hover:underline"
+          className="text-white text-4xl font-arcade text-center mt-8 cursor-pointer hover:underline glow-text"
           onClick={handleDownload}
         >
           Download Resume
