@@ -8,24 +8,28 @@ const skills = [
   { name: "CSS", icon: "🎨", color: "#1572B6" },
   { name: "Node.js", icon: "🟢", color: "#339933" },
   { name: "Git", icon: "🔀", color: "#F05032" },
-  { name: "React", icon: "⚛️", color: "#61DAFB" },
-  { name: "JavaScript", icon: "JS", color: "#F7DF1E" },
-  { name: "Python", icon: "🐍", color: "#3776AB" },
-  { name: "CSS", icon: "🎨", color: "#1572B6" },
-  { name: "Node.js", icon: "🟢", color: "#339933" },
-  { name: "Git", icon: "🔀", color: "#F05032" },
-  { name: "React", icon: "⚛️", color: "#61DAFB" },
-  { name: "JavaScript", icon: "JS", color: "#F7DF1E" },
-  { name: "Python", icon: "🐍", color: "#3776AB" },
-  { name: "CSS", icon: "🎨", color: "#1572B6" },
-  { name: "Node.js", icon: "🟢", color: "#339933" },
-  { name: "Git", icon: "🔀", color: "#F05032" },
-  { name: "React", icon: "⚛️", color: "#61DAFB" },
-  { name: "JavaScript", icon: "JS", color: "#F7DF1E" },
-  { name: "Python", icon: "🐍", color: "#3776AB" },
-  { name: "CSS", icon: "🎨", color: "#1572B6" },
-  { name: "Node.js", icon: "🟢", color: "#339933" },
-  { name: "Git", icon: "🔀", color: "#F05032" },
+  { name: "C", icon: "©️", color: "#A8B9CC" },
+  { name: "C++", icon: "➕", color: "#00599C" },
+  { name: "Java", icon: "☕", color: "#007396" },
+  { name: "HTML", icon: "🌐", color: "#E34F26" },
+  { name: "Solidity", icon: "💎", color: "#363636" },
+  { name: "Docker", icon: "🐳", color: "#2496ED" },
+  { name: "Postman", icon: "📮", color: "#FF6C37" },
+  { name: "Kaggle", icon: "📊", color: "#20BEFF" },
+  { name: "Remix IDE", icon: "🔧", color: "#5A5A5A" },
+  { name: "NextJS", icon: "▲", color: "#000000" },
+  { name: "TailwindCSS", icon: "🌬️", color: "#38B2AC" },
+  { name: "Flask", icon: "🌶️", color: "#000000" },
+  { name: "Foundry", icon: "🏭", color: "#1C1C1C" },
+  { name: "AWS", icon: "☁️", color: "#232F3E" },
+  { name: "Azure", icon: "☁️", color: "#0089D6" },
+  { name: "Firebase", icon: "🔥", color: "#FFCA28" },
+  { name: "NumPy", icon: "🔢", color: "#013243" },
+  { name: "TensorFlow", icon: "📊", color: "#FF6F00" },
+  { name: "Matplotlib", icon: "📉", color: "#11557C" },
+  { name: "Linux", icon: "🐧", color: "#FCC624" },
+  { name: "Blockchain", icon: "🔗", color: "#121D33" },
+  { name: "OpenCV", icon: "👁️", color: "#5C3EE8" },
 ];
 
 export default function SkillsModal({ visibility, onClose }) {
@@ -33,9 +37,9 @@ export default function SkillsModal({ visibility, onClose }) {
     <section
       className={`${
         visibility ? "flex" : "hidden"
-      } h-screen w-screen justify-center fixed items-center bg-black bg-opacity-50`}
+      } h-screen w-screen justify-center fixed items-center bg-black bg-opacity-50 `}
     >
-      <div className="bg-slate-800 h-[85vh] w-[85vw] fixed z-20 pixel-border rounded-lg flex flex-col overflow-hidden">
+      <div className="bg-slate-800 h-[85vh] w-[85vw] fixed z-20 pixel-border rounded-lg flex flex-col overflow-hidden ">
         <div className="p-4 relative">
           <button
             onClick={onClose}
@@ -61,33 +65,63 @@ export default function SkillsModal({ visibility, onClose }) {
             Skills
           </h1>
         </div>
-        <div className="flex-grow overflow-auto px-4 md:px-[5vw] pb-8">
-          <ResponsiveHoneycomb
-            defaultWidth={1000}
-            size={75}
-            items={skills}
-            renderItem={(item, index) => (
-              <Hexagon
-                key={index}
-                style={{
-                  backgroundColor: item.color,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "10px",
-                  cursor: "pointer",
-                  transition: "transform 0.3s ease",
-                }}
-                className="hover:scale-110"
-              >
-                <span className="text-4xl mb-2">{item.icon}</span>
-                <span className="text-white text-center font-bold text-sm">
-                  {item.name}
-                </span>
-              </Hexagon>
-            )}
-          />
+        <div className="flex-grow overflow-auto px-4 md:px-[5vw] pb-8 scrollbar-hide">
+          <div className="block md:hidden">
+            <ResponsiveHoneycomb
+              defaultWidth={1000}
+              size={60}
+              items={skills}
+              renderItem={(item, index) => (
+                <Hexagon
+                  key={index}
+                  style={{
+                    backgroundColor: item.color,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "10px",
+                    cursor: "pointer",
+                    transition: "transform 0.3s ease",
+                  }}
+                  className="hover:scale-110"
+                >
+                  <span className="text-4xl mb-2">{item.icon}</span>
+                  <span className="text-white text-center font-bold text-sm">
+                    {item.name}
+                  </span>
+                </Hexagon>
+              )}
+            />
+          </div>
+          <div className="hidden md:block">
+            <ResponsiveHoneycomb
+              defaultWidth={1000}
+              size={75}
+              items={skills}
+              renderItem={(item, index) => (
+                <Hexagon
+                  key={index}
+                  style={{
+                    backgroundColor: item.color,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "10px",
+                    cursor: "pointer",
+                    transition: "transform 0.3s ease",
+                  }}
+                  className="hover:scale-110"
+                >
+                  <span className="text-4xl mb-2">{item.icon}</span>
+                  <span className="text-white text-center font-bold text-sm">
+                    {item.name}
+                  </span>
+                </Hexagon>
+              )}
+            />
+          </div>
         </div>
       </div>
     </section>
