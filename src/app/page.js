@@ -1,46 +1,46 @@
 "use client";
 
 import GameCanvas from "@/components/GameCanvas";
-import AnimatedHeading from "@/components/AnimatedHeading";
-import AchievementsModal from "@/components/AchievementsModal";
-import ResumeModal from "@/components/ResumeModal";
+import React, { useState } from "react";
 
-import { useState } from "react";
-import SkillsModal from "@/components/SkillsModal";
+const modals = {
+  AchievementsModal: () => import("@/components/AchievementsModal"),
+  ResumeModal: () => import("@/components/ResumeModal"),
+  SkillsModal: () => import("@/components/SkillsModal"),
+};
 
 export default function Home() {
-  const [achievementsVisibility, setAchievementsVisibility] = useState(false);
-  const [resumeVisibility, setResumeVisibility] = useState(false);
-  const [skillsVisibility, setSkillsVisibility] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
+
+  const closeModal = () => setActiveModal(null);
+
+  const renderModal = () => {
+    if (!activeModal) return null;
+    const ModalComponent = modals[activeModal];
+    const LazyModal = React.lazy(ModalComponent);
+
+    return (
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <LazyModal visibility={!!activeModal} onClose={closeModal} />
+      </React.Suspense>
+    );
+  };
 
   return (
     <main className="w-screen h-screen flex flex-col bg-black">
-      {/* /* <AnimatedHeading text={"Hi I'm Ansh, and this is my portfolio"} /> */}
-      <div className="h-1/2 md:h-full">
-        {" "}
+      <div>
         <GameCanvas
-          setAchievementsVisibility={setAchievementsVisibility}
-          setResumeVisibility={setResumeVisibility}
-          setSkillsVisibility={setSkillsVisibility}
+          setAchievementsVisibility={(b) =>
+            b ? setActiveModal("AchievementsModal") : setActiveModal(null)
+          }
+          setResumeVisibility={(b) =>
+            b ? setActiveModal("ResumeModal") : setActiveModal(null)
+          }
+          setSkillsVisibility={(b) =>
+            b ? setActiveModal("SkillsModal") : setActiveModal(null)
+          }
         />
-        <AchievementsModal
-          visibility={achievementsVisibility}
-          onClose={() => {
-            setAchievementsVisibility(false);
-          }}
-        />
-        <ResumeModal
-          visibility={resumeVisibility}
-          onClose={() => {
-            setResumeVisibility(false);
-          }}
-        />
-        <SkillsModal
-          visibility={skillsVisibility}
-          onClose={() => {
-            setSkillsVisibility(false);
-          }}
-        />
+        {renderModal()}
       </div>
     </main>
   );

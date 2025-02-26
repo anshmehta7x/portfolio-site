@@ -183,6 +183,7 @@ export default function GameCanvas({
         setAchievementsVisibility(false);
         setResumeVisibility(false);
         setSkillsVisibility(false);
+
         setTimeout(() => {
           setIsMoving(false);
         }, 400);
