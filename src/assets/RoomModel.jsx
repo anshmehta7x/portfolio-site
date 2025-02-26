@@ -65,7 +65,13 @@ export function RoomModel(props) {
         geometry={nodes.table_fireRed_material_0.geometry}
         material={materials.fireRed_material}
       />
-      <group name="computer">
+      <group
+        name="computer"
+        onClick={() => {
+          console.log("computer clicked!");
+          props.onInteraction("computer");
+        }}
+      >
         <mesh
           castShadow
           receiveShadow
@@ -149,7 +155,13 @@ export function RoomModel(props) {
         geometry={nodes.stairs_fireRed_material_0.geometry}
         material={materials.fireRed_material}
       />
-      <group name="certificate">
+      <group
+        name="certificate"
+        onClick={() => {
+          console.log("certificate clicked!");
+          props.onInteraction("certificate");
+        }}
+      >
         <mesh
           castShadow
           receiveShadow

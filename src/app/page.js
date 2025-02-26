@@ -14,31 +14,34 @@ export default function Home() {
   const [skillsVisibility, setSkillsVisibility] = useState(false);
 
   return (
-    <main className="w-screen h-screen flex flex-col bg-cyan-400">
-      <AnimatedHeading text={"Hi I'm Ansh, and this is my portfolio"} />
-      <GameCanvas
-        setAchievementsVisibility={setAchievementsVisibility}
-        setResumeVisibility={setResumeVisibility}
-        setSkillsVisibility={setSkillsVisibility}
-      />
-      <AchievementsModal
-        visibility={achievementsVisibility}
-        onClose={() => {
-          setAchievementsVisibility(false);
-        }}
-      />
-      <ResumeModal
-        visibility={resumeVisibility}
-        onClose={() => {
-          setResumeVisibility(false);
-        }}
-      />
-      <SkillsModal
-        visibility={skillsVisibility}
-        onClose={() => {
-          setSkillsVisibility(false);
-        }}
-      />
+    <main className="w-screen h-screen flex flex-col bg-black">
+      {/* /* <AnimatedHeading text={"Hi I'm Ansh, and this is my portfolio"} /> */}
+      <div className="h-1/2 md:h-full">
+        {" "}
+        <GameCanvas
+          setAchievementsVisibility={setAchievementsVisibility}
+          setResumeVisibility={setResumeVisibility}
+          setSkillsVisibility={setSkillsVisibility}
+        />
+        <AchievementsModal
+          visibility={achievementsVisibility}
+          onClose={() => {
+            setAchievementsVisibility(false);
+          }}
+        />
+        <ResumeModal
+          visibility={resumeVisibility}
+          onClose={() => {
+            setResumeVisibility(false);
+          }}
+        />
+        <SkillsModal
+          visibility={skillsVisibility}
+          onClose={() => {
+            setSkillsVisibility(false);
+          }}
+        />
+      </div>
     </main>
   );
 }

@@ -110,6 +110,7 @@ export default function GameCanvas({
     loop: true,
     rotate: orientation,
   });
+
   const handleInteract = useCallback(() => {
     if (interactionType) {
       console.log(`Interacting with ${interactionType}`);
@@ -227,6 +228,19 @@ export default function GameCanvas({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleMove, handleInteract]);
 
+  function handleClickInteraction(type) {
+    console.log("Clicked on interaction:", type);
+    if (type === "certificate") {
+      // Toggle achievements visibility
+      setAchievementsVisibility((prevVisibility) => !prevVisibility);
+    } else if (type === "computer") {
+      // Toggle resume visibility
+      setResumeVisibility((prevVisibility) => !prevVisibility);
+    } else if (type === "bookshelf") {
+      setSkillsVisibility((prevVisibility) => !prevVisibility);
+    }
+  }
+
   return (
     <section className="flex h-full w-full  ">
       <div className="m-2 p-2 w-full h-[50vh] md:h-[80vh] border-red-500">
@@ -236,53 +250,13 @@ export default function GameCanvas({
             <RoomModel
               interactions={interactions}
               interactionType={interactionType}
+              onInteraction={handleClickInteraction}
             />
             <PlayerModel isMoving={isMoving} position={pos} rotation={rot} />
           </Suspense>
         </Canvas>
       </div>
       <div className=" h-[40vh] md:hidden"></div>
-      {/* <div className="w-6">
-        <button
-          className="w-full h-12 bg-blue-500 text-white"
-          onClick={() => {
-            handleMove(1);
-          }}
-        >
-          Move Backward
-        </button>
-        <button
-          className="w-full h-12 bg-blue-500 text-white"
-          onClick={() => {
-            handleMove(2);
-          }}
-        >
-          Move Forward
-        </button>
-        <button
-          className="w-full h-12 bg-blue-500 text-white
-        "
-          onClick={() => {
-            handleMove(3);
-          }}
-        >
-          Move Left
-        </button>
-        <button
-          className="w-full h-12 bg-blue-500 text-white"
-          onClick={() => {
-            handleMove(4);
-          }}
-        >
-          Move Right
-        </button>
-        <button
-          className="w-full h-12 bg-blue-500 text-white"
-          onClick={handleInteract}
-        >
-          Interact
-        </button>
-      </div> */}
     </section>
   );
 }
