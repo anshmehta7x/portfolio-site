@@ -12,7 +12,7 @@ export default function ResumeModal({ visibility, onClose }) {
     <section
       className={`${
         visibility ? "flex" : "hidden"
-      } h-screen w-screen justify-center fixed items-center`}
+      } h-screen w-screen justify-center fixed items-center top-0 z-10`}
     >
       <div className="bg-slate-500 h-[25vh] w-[25vw] fixed z-20 pixel-border overflow-auto">
         <button
