@@ -1,7 +1,9 @@
 "use client";
 
 import GameCanvas from "@/components/GameCanvas";
+import GameBoy from "@/components/GameBoy";
 import React, { useState } from "react";
+import isMobile from "is-mobile";
 
 const modals = {
   AchievementsModal: () => import("@/components/AchievementsModal"),
@@ -27,21 +29,40 @@ export default function Home() {
   };
 
   return (
-    <main className="w-screen h-screen flex flex-col bg-black">
-      <div>
-        <GameCanvas
-          setAchievementsVisibility={(b) =>
-            b ? setActiveModal("AchievementsModal") : setActiveModal(null)
-          }
-          setResumeVisibility={(b) =>
-            b ? setActiveModal("ResumeModal") : setActiveModal(null)
-          }
-          setSkillsVisibility={(b) =>
-            b ? setActiveModal("SkillsModal") : setActiveModal(null)
-          }
-        />
-        {renderModal()}
-      </div>
-    </main>
+    <>
+      {isMobile() ? (
+        <main className="w-screen h-screen flex flex-col bg-black overflow-hidden">
+          <GameBoy
+            setAchievementsVisibility={(b) =>
+              b ? setActiveModal("AchievementsModal") : setActiveModal(null)
+            }
+            setResumeVisibility={(b) =>
+              b ? setActiveModal("ResumeModal") : setActiveModal(null)
+            }
+            setSkillsVisibility={(b) =>
+              b ? setActiveModal("SkillsModal") : setActiveModal(null)
+            }
+          />
+          {renderModal()}
+        </main>
+      ) : (
+        <main className="w-screen h-screen flex flex-col bg-black">
+          <div>
+            <GameCanvas
+              setAchievementsVisibility={(b) =>
+                b ? setActiveModal("AchievementsModal") : setActiveModal(null)
+              }
+              setResumeVisibility={(b) =>
+                b ? setActiveModal("ResumeModal") : setActiveModal(null)
+              }
+              setSkillsVisibility={(b) =>
+                b ? setActiveModal("SkillsModal") : setActiveModal(null)
+              }
+            />
+            {renderModal()}
+          </div>
+        </main>
+      )}
+    </>
   );
 }

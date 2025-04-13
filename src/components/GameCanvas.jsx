@@ -244,7 +244,7 @@ export default function GameCanvas({
 
   return (
     <section className="flex h-full w-full  ">
-      <div className="m-2 p-2 w-full h-[50vh] md:h-[80vh] border-red-500">
+      <div className="m-2 p-2 w-full md:h-[80vh] border-red-500">
         <Canvas camera={{ position: [5, 5, 8] }}>
           <OrbitControls enabled={true} />
           <Suspense fallback={null}>
