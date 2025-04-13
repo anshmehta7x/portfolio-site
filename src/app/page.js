@@ -1,15 +1,21 @@
 "use client";
 
 import GameCanvas from "@/components/GameCanvas";
-import GameBoy from "@/components/GameBoy";
+// import GameBoy from "@/components/GameBoy";
 import React, { useState } from "react";
 import isMobile from "is-mobile";
+import dynamic from "next/dynamic";
 
 const modals = {
   AchievementsModal: () => import("@/components/AchievementsModal"),
   ResumeModal: () => import("@/components/ResumeModal"),
   SkillsModal: () => import("@/components/SkillsModal"),
 };
+
+const GameBoy = dynamic(() => import("@/components/GameBoy"), {
+  ssr: false,
+  loading: () => <div>Loading...</div>,
+});
 
 export default function Home() {
   const [activeModal, setActiveModal] = useState(null);

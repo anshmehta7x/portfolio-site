@@ -40,15 +40,11 @@ export default function AchievementsModal({ visibility, onClose }) {
     <section
       className={`${
         visibility ? "flex" : "hidden"
-      } h-screen w-screen justify-center top-0 fixed items-center bg-black bg-opacity-50`}
+      } h-screen w-screen justify-center top-0 fixed items-center bg-black bg-opacity-50 z-[9999]`}
     >
-      {/* Retro-styled modal with nested borders */}
-      <div className="fixed z-20 w-[95vw] md:w-[85vw] h-[90vh] md:h-[85vh] flex flex-col">
-        {/* Outer border - Dark Navy/Purple */}
+      <div className="fixed z-100 w-[95vw] md:w-[85vw] h-[90vh] md:h-[85vh] flex flex-col">
         <div className="w-full h-full p-4 md:p-6 bg-[#2A2B3F]">
-          {/* Middle border - Peach/Orange */}
           <div className="w-full h-full p-4 md:p-5 bg-[#E8A87C]">
-            {/* Inner content area - Light Cream */}
             <div className="w-full h-full p-4 md:p-5 bg-[#F7F7F7] flex flex-col">
               <div className="relative">
                 <button

@@ -39,7 +39,7 @@ export default function SkillsModal({ visibility, onClose }) {
         visibility ? "flex" : "hidden"
       } h-screen w-screen justify-center fixed items-center bg-black bg-opacity-50 `}
     >
-      <div className="bg-slate-800 h-[85vh] w-[85vw] fixed z-20 pixel-border rounded-lg flex flex-col overflow-hidden ">
+      <div className="bg-slate-800 h-[85vh] w-[85vw] fixed z-100 pixel-border rounded-lg flex flex-col overflow-hidden ">
         <div className="p-4 relative">
           <button
             onClick={onClose}
