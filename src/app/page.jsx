@@ -20,6 +20,7 @@ export default function Home() {
   const [activeModal, setActiveModal] = useState(null);
   const [isClientMobile, setIsClientMobile] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+  const [gbaPress, setGbaPress] = useState("");
 
   useEffect(() => {
     setIsClientMobile(isMobile());
@@ -56,6 +57,8 @@ export default function Home() {
             setSkillsVisibility={(b) =>
               b ? setActiveModal("SkillsModal") : setActiveModal(null)
             }
+            setGbaPress={setGbaPress}
+            gbaPress={gbaPress}
           />
           {renderModal()}
         </>

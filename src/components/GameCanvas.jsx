@@ -15,6 +15,9 @@ export default function GameCanvas({
   setAchievementsVisibility,
   setResumeVisibility,
   setSkillsVisibility,
+
+  gbaPress,
+  setGbaPress,
 }) {
   const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
   const [currY, setCurrY] = useState(3.5);
@@ -229,6 +232,32 @@ export default function GameCanvas({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleMove, handleInteract]);
 
+  useEffect(() => {
+    if (!gbaPress) return;
+
+    switch (gbaPress) {
+      case "up":
+        handleMove(2);
+        break;
+      case "down":
+        handleMove(1);
+        break;
+      case "left":
+        handleMove(3);
+        break;
+      case "right":
+        handleMove(4);
+        break;
+      case "a":
+      case "start":
+        handleInteract();
+        break;
+      default:
+        break;
+    }
+    setGbaPress("");
+  }, [gbaPress, handleMove, handleInteract]);
+
   function handleClickInteraction(type) {
     console.log("Clicked on interaction:", type);
     if (type === "certificate") {
@@ -244,7 +273,7 @@ export default function GameCanvas({
 
   return (
     <section className="flex h-full w-full  ">
-      <div className="m-2 p-2 w-full md:h-[80vh] border-red-500">
+      <div className=" p-2 w-full md:h-[80vh] border-red-500">
         <Canvas camera={{ position: [5, 5, 8] }}>
           <OrbitControls enabled={true} />
           <Suspense fallback={null}>
@@ -257,8 +286,6 @@ export default function GameCanvas({
           </Suspense>
         </Canvas>
       </div>
-      <div className=" h-[40vh] md:hidden"></div>
     </section>
   );
 }
-// Path: src/components/PlayerModel.jsx

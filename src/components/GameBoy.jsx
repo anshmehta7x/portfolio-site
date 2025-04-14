@@ -5,7 +5,13 @@ export default function GameBoy({
   setAchievementsVisibility,
   setResumeVisibility,
   setSkillsVisibility,
+  setGbaPress,
+  gbaPress,
 }) {
+  function buttonHandler(pressed) {
+    setGbaPress(pressed);
+  }
+
   return (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-t from-slate-800 to-slate-900">
       <div className="relative w-full h-full flex items-center justify-center">
@@ -19,6 +25,8 @@ export default function GameBoy({
                 setAchievementsVisibility={setAchievementsVisibility}
                 setResumeVisibility={setResumeVisibility}
                 setSkillsVisibility={setSkillsVisibility}
+                gbaPress={gbaPress}
+                setGbaPress={setGbaPress}
               />
             </div>
 
@@ -104,20 +112,40 @@ export default function GameBoy({
             <div className="bg-gradient-to-br from-neutral-800 to-neutral-700 rounded-full w-5 h-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-[inset_2px_2px_4px_0_rgba(0,0,0,0.75),2px_2px_4px_0_rgba(255,255,255,.2)]"></div>
 
             {/* Triangles */}
-            <div className="absolute top-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[16px] border-b-neutral-900 shadow-[0_1px_0_0_rgba(255,255,255,.2)] z-50"></div>
-            <div className="absolute bottom-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[16px] border-t-neutral-800 z-50"></div>
-            <div className="absolute left-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[16px] border-r-neutral-900 shadow-[1px_0_0_0_rgba(255,255,255,.2)] z-50"></div>
-            <div className="absolute right-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[16px] border-l-neutral-800 z-50"></div>
+            <div
+              className="absolute top-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[16px] border-b-neutral-900 shadow-[0_1px_0_0_rgba(255,255,255,.2)] z-50"
+              onClick={() => buttonHandler("up")}
+            ></div>
+            <div
+              className="absolute bottom-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[16px] border-t-neutral-800 z-50"
+              onClick={() => buttonHandler("down")}
+            ></div>
+
+            <div
+              className="absolute left-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[16px] border-r-neutral-900 shadow-[1px_0_0_0_rgba(255,255,255,.2)] z-50"
+              onClick={() => buttonHandler("left")}
+            ></div>
+
+            <div
+              className="absolute right-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[16px] border-l-neutral-800 z-50"
+              onClick={() => buttonHandler("right")}
+            ></div>
           </div>
 
           {/* A and B buttons */}
           <div className="absolute right-[6%] bottom-[21%] w-28 h-16">
-            <div className="bg-gradient-to-br from-neutral-700 to-neutral-800 rounded-full w-12 h-12 absolute bottom-0 border-4 border-solid border-black border-b-2 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]">
+            <div
+              className="bg-gradient-to-br from-neutral-700 to-neutral-800 rounded-full w-12 h-12 absolute bottom-0 border-4 border-solid border-black border-b-2 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
+              onClick={() => buttonHandler("b")}
+            >
               <span className="font-bold text-white absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xl">
                 B
               </span>
             </div>
-            <div className="bg-gradient-to-br from-neutral-700 to-neutral-800 rounded-full h-12 w-12 absolute right-0 border-4 border-solid border-black border-b-2 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]">
+            <div
+              className="bg-gradient-to-br from-neutral-700 to-neutral-800 rounded-full h-12 w-12 absolute right-0 border-4 border-solid border-black border-b-2 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
+              onClick={() => buttonHandler("a")}
+            >
               <span className="font-bold text-white absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xl">
                 A
               </span>
@@ -127,14 +155,20 @@ export default function GameBoy({
           {/* Start Select */}
           <div className="absolute bottom-[4%] flex space-x-4">
             <div className="flex flex-col items-center">
-              <div className="bg-gradient-to-b from-slate-800 to-violet-700 w-12 h-5 rounded-full flex items-center justify-center">
+              <div
+                className="bg-gradient-to-b from-slate-800 to-violet-700 w-12 h-5 rounded-full flex items-center justify-center"
+                onClick={() => buttonHandler("select")}
+              >
                 <div className="bg-gradient-to-b from-neutral-700 via-neutral-600 to-neutral-900 shadow-[inset_-2px_-1px_10px_0_rgba(0,0,0,1)] w-[90%] h-[70%] rounded-full"></div>
               </div>
               <div className="text-violet-700 text-sm">SELECT</div>
             </div>
 
             <div className="flex flex-col items-center">
-              <div className="bg-gradient-to-b from-slate-800 to-violet-700 w-12 h-5 rounded-full flex items-center justify-center">
+              <div
+                className="bg-gradient-to-b from-slate-800 to-violet-700 w-12 h-5 rounded-full flex items-center justify-center"
+                onClick={() => buttonHandler("start")}
+              >
                 <div className="bg-gradient-to-b from-neutral-700 via-neutral-600 to-neutral-900 shadow-[inset_-2px_-1px_10px_0_rgba(0,0,0,1)] w-[90%] h-[70%] rounded-full"></div>
               </div>
               <div className="text-violet-700 text-sm">START</div>
