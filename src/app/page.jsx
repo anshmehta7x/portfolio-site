@@ -1,8 +1,7 @@
 "use client";
 
 import GameCanvas from "@/components/GameCanvas";
-// import GameBoy from "@/components/GameBoy";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import isMobile from "is-mobile";
 import dynamic from "next/dynamic";
 
@@ -19,6 +18,13 @@ const GameBoy = dynamic(() => import("@/components/GameBoy"), {
 
 export default function Home() {
   const [activeModal, setActiveModal] = useState(null);
+  const [isClientMobile, setIsClientMobile] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setIsClientMobile(isMobile());
+    setHasMounted(true);
+  }, []);
 
   const closeModal = () => setActiveModal(null);
 
@@ -34,10 +40,12 @@ export default function Home() {
     );
   };
 
+  if (!hasMounted) return null; // Avoid mismatch during hydration
+
   return (
-    <>
-      {isMobile() ? (
-        <main className="w-screen h-screen flex flex-col bg-black overflow-hidden">
+    <main className="w-screen h-screen flex flex-col bg-black overflow-hidden">
+      {isClientMobile ? (
+        <>
           <GameBoy
             setAchievementsVisibility={(b) =>
               b ? setActiveModal("AchievementsModal") : setActiveModal(null)
@@ -50,25 +58,23 @@ export default function Home() {
             }
           />
           {renderModal()}
-        </main>
+        </>
       ) : (
-        <main className="w-screen h-screen flex flex-col bg-black">
-          <div>
-            <GameCanvas
-              setAchievementsVisibility={(b) =>
-                b ? setActiveModal("AchievementsModal") : setActiveModal(null)
-              }
-              setResumeVisibility={(b) =>
-                b ? setActiveModal("ResumeModal") : setActiveModal(null)
-              }
-              setSkillsVisibility={(b) =>
-                b ? setActiveModal("SkillsModal") : setActiveModal(null)
-              }
-            />
-            {renderModal()}
-          </div>
-        </main>
+        <>
+          <GameCanvas
+            setAchievementsVisibility={(b) =>
+              b ? setActiveModal("AchievementsModal") : setActiveModal(null)
+            }
+            setResumeVisibility={(b) =>
+              b ? setActiveModal("ResumeModal") : setActiveModal(null)
+            }
+            setSkillsVisibility={(b) =>
+              b ? setActiveModal("SkillsModal") : setActiveModal(null)
+            }
+          />
+          {renderModal()}
+        </>
       )}
-    </>
+    </main>
   );
 }
