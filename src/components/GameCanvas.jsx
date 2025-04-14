@@ -1,25 +1,69 @@
 import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { RoomModel } from "@/assets/RoomModel";
 import { PlayerModel } from "@/assets/PlayerModel";
-import { Suspense } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useCallback } from "react";
-import { useSpring } from "@react-spring/three";
+import { Suspense, useEffect, useState, useCallback, useRef } from "react";
+import { useSpring, animated } from "@react-spring/three";
+import * as THREE from "three";
 import useSound from "use-sound";
 
 const collisionsound = "/sounds/collisionsound.mp3";
+
+// Camera component that follows the player
+function FollowCamera({ playerPosition, playerRotation }) {
+  const { camera } = useThree();
+  const cameraRef = useRef({
+    position: new THREE.Vector3(5, 5, 8),
+    target: new THREE.Vector3(5.5, 0, 3.5),
+  });
+
+  useFrame(() => {
+    if (!playerPosition) return;
+
+    // Calculate camera position based on player's position and orientation
+    const playerPos = new THREE.Vector3(
+      playerPosition[0],
+      0,
+      playerPosition[2]
+    );
+
+    // Extract player's orientation (rotation)
+    const [_, rotY] = playerRotation;
+
+    // Calculate offset based on player rotation (camera should be behind player)
+    const distance = 4; // Distance from player
+    const height = 3.5; // Height above player
+
+    const cameraOffset = new THREE.Vector3(
+      -Math.sin(rotY) * distance,
+      height,
+      -Math.cos(rotY) * distance
+    );
+
+    // Calculate target camera position
+    const targetCameraPos = playerPos.clone().add(cameraOffset);
+
+    // Smooth interpolation for camera position
+    cameraRef.current.position.lerp(targetCameraPos, 0.05);
+
+    // Set camera position
+    camera.position.copy(cameraRef.current.position);
+
+    // Make camera look at player
+    camera.lookAt(playerPos);
+  });
+
+  return null;
+}
 
 export default function GameCanvas({
   setAchievementsVisibility,
   setResumeVisibility,
   setSkillsVisibility,
-
   gbaPress,
   setGbaPress,
 }) {
-  const [currX, setCurrX] = useState(5.5); //spawn player at 5.5 , 3.5
+  const [currX, setCurrX] = useState(5.5); // spawn player at 5.5, 3.5
   const [currY, setCurrY] = useState(3.5);
   const [isMoving, setIsMoving] = useState(false);
   const [computerTint, setComputerTint] = useState(false);
@@ -104,7 +148,7 @@ export default function GameCanvas({
     return interaction ? interaction.type : null;
   };
 
-  const [orientation, setOrientation] = useState([0, Math.PI, 0]); // 0 = [0,1], 1 = [1,0], 2 = [0,-1], 3 = [-1,0
+  const [orientation, setOrientation] = useState([0, Math.PI, 0]); // 0 = [0,1], 1 = [1,0], 2 = [0,-1], 3 = [-1,0]
 
   const { pos, rot } = useSpring({
     pos: [currX, 0, currY],
@@ -196,11 +240,23 @@ export default function GameCanvas({
         setIsMoving(false);
       }
     },
-    [currX, currY, limits.x, limits.y, collisions, setAchievementsVisibility]
+    [
+      currX,
+      currY,
+      limits.x,
+      limits.y,
+      collisions,
+      setAchievementsVisibility,
+      setResumeVisibility,
+      setSkillsVisibility,
+      collisionSoundPlay,
+    ]
   );
 
   useEffect(() => {
     const handleKeyDown = (event) => {
+      if (isMoving) return; // Prevent movement while already moving
+
       switch (event.key) {
         case "ArrowUp":
         case "w":
@@ -230,10 +286,11 @@ export default function GameCanvas({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleMove, handleInteract]);
+  }, [handleMove, handleInteract, isMoving]);
 
   useEffect(() => {
     if (!gbaPress) return;
+    if (isMoving) return; // Prevent movement while already moving
 
     switch (gbaPress) {
       case "up":
@@ -256,7 +313,7 @@ export default function GameCanvas({
         break;
     }
     setGbaPress("");
-  }, [gbaPress, handleMove, handleInteract]);
+  }, [gbaPress, handleMove, handleInteract, setGbaPress, isMoving]);
 
   function handleClickInteraction(type) {
     console.log("Clicked on interaction:", type);
@@ -272,10 +329,11 @@ export default function GameCanvas({
   }
 
   return (
-    <section className="flex h-full w-full  ">
-      <div className=" p-2 w-full md:h-[80vh] border-red-500">
-        <Canvas camera={{ position: [5, 5, 8] }}>
-          <OrbitControls enabled={true} />
+    <section className="flex h-full w-full">
+      <div className="p-2 w-full md:h-[80vh] border-red-500">
+        <Canvas camera={{ position: [5, 5, 8], fov: 60 }}>
+          {/* Disable OrbitControls as we're using a custom camera follower */}
+          <OrbitControls enabled={false} />
           <Suspense fallback={null}>
             <RoomModel
               interactions={interactions}
@@ -283,6 +341,10 @@ export default function GameCanvas({
               onInteraction={handleClickInteraction}
             />
             <PlayerModel isMoving={isMoving} position={pos} rotation={rot} />
+            <FollowCamera
+              playerPosition={pos.get()}
+              playerRotation={rot.get()}
+            />
           </Suspense>
         </Canvas>
       </div>
