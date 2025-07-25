@@ -68,6 +68,7 @@ export default function GameCanvas({
   const [isMoving, setIsMoving] = useState(false);
   const [computerTint, setComputerTint] = useState(false);
   const [interactionType, setInteractionType] = useState(null);
+  const [currentDirection, setCurrentDirection] = useState(2); // Start facing up (2)
 
   const [collisionSoundPlay] = useSound(collisionsound);
 
@@ -123,19 +124,30 @@ export default function GameCanvas({
     },
   ];
 
-  const changeOrientation = (direction) => {
+  const getOrientationFromDirection = (direction) => {
     switch (direction) {
-      case 1:
+      case 1: // Down
         return [0, 0, 0];
-      case 2:
+      case 2: // Up
         return [0, Math.PI, 0];
-      case 3:
+      case 3: // Left
         return [0, -Math.PI / 2, 0];
-      case 4:
+      case 4: // Right
         return [0, Math.PI / 2, 0];
       default:
         return [0, 0, 0];
     }
+  };
+
+  // Helper function to get the shortest rotation path
+  const getShortestRotation = (currentRot, targetRot) => {
+    let diff = targetRot - currentRot;
+
+    // Normalize the difference to [-π, π]
+    while (diff > Math.PI) diff -= 2 * Math.PI;
+    while (diff < -Math.PI) diff += 2 * Math.PI;
+
+    return currentRot + diff;
   };
 
   const checkInteractions = (x, y) => {
@@ -148,24 +160,24 @@ export default function GameCanvas({
     return interaction ? interaction.type : null;
   };
 
-  const [orientation, setOrientation] = useState([0, Math.PI, 0]); // 0 = [0,1], 1 = [1,0], 2 = [0,-1], 3 = [-1,0]
+  const [orientation, setOrientation] = useState([0, Math.PI, 0]);
 
   const { pos, rot } = useSpring({
     pos: [currX, 0, currY],
     rot: orientation,
-    config: { duration: 500 },
-    loop: true,
-    rotate: orientation,
+    config: {
+      tension: 300,
+      friction: 30,
+      duration: undefined, // Remove fixed duration for smoother movement
+    },
   });
 
   const handleInteract = useCallback(() => {
     if (interactionType) {
       console.log(`Interacting with ${interactionType}`);
       if (interactionType === "certificate") {
-        // Toggle achievements visibility
         setAchievementsVisibility((prevVisibility) => !prevVisibility);
       } else if (interactionType === "computer") {
-        // Toggle resume visibility
         setResumeVisibility((prevVisibility) => !prevVisibility);
       } else if (interactionType === "bookshelf") {
         setSkillsVisibility((prevVisibility) => !prevVisibility);
@@ -179,29 +191,53 @@ export default function GameCanvas({
     setSkillsVisibility,
   ]);
 
+  // Get relative direction based on current facing direction
+  const getRelativeDirection = (input, currentFacing) => {
+    const directionMap = {
+      // When facing up (2)
+      2: { front: 2, back: 1, left: 3, right: 4 },
+      // When facing down (1)
+      1: { front: 1, back: 2, left: 4, right: 3 },
+      // When facing left (3)
+      3: { front: 3, back: 4, left: 1, right: 2 },
+      // When facing right (4)
+      4: { front: 4, back: 3, left: 2, right: 1 },
+    };
+
+    return directionMap[currentFacing][input];
+  };
+
   const handleMove = useCallback(
-    (direction) => {
-      setOrientation(changeOrientation(direction));
+    (inputDirection) => {
+      if (isMoving) return;
+
+      // Convert input to actual direction based on current facing
+      const actualDirection = getRelativeDirection(
+        inputDirection,
+        currentDirection
+      );
+
       let newX = currX;
       let newY = currY;
 
-      switch (direction) {
-        case 1:
+      switch (actualDirection) {
+        case 1: // Down
           newY = currY + 1;
           break;
-        case 2:
+        case 2: // Up
           newY = currY - 1;
           break;
-        case 3:
+        case 3: // Left
           newX = currX - 1;
           break;
-        case 4:
+        case 4: // Right
           newX = currX + 1;
           break;
         default:
           break;
       }
 
+      // Check boundaries
       if (
         newX < limits.x[0] ||
         newX > limits.x[1] ||
@@ -210,39 +246,59 @@ export default function GameCanvas({
       ) {
         collisionSoundPlay();
         console.log("Cannot move outside the limits.");
-        setIsMoving(false);
         return;
       }
 
+      // Check collisions
       const isCollision = collisions.some(([x, y]) => x === newX && y === newY);
 
       if (!isCollision) {
         setIsMoving(true);
+
+        // Update facing direction only if it's different
+        if (actualDirection !== currentDirection) {
+          const currentOrientation =
+            getOrientationFromDirection(currentDirection);
+          const newOrientation = getOrientationFromDirection(actualDirection);
+
+          // Calculate shortest rotation path
+          const shortestY = getShortestRotation(
+            currentOrientation[1],
+            newOrientation[1]
+          );
+          setOrientation([0, shortestY, 0]);
+          setCurrentDirection(actualDirection);
+        }
+
+        // Move to new position
         setCurrX(newX);
         setCurrY(newY);
+
         const interaction = checkInteractions(newX, newY);
         if (interaction) {
           setInteractionType(interaction);
         } else {
-          setInteractionType(null); // Reset interaction type when moving away from an interactable position
+          setInteractionType(null);
         }
-        // Close achievements visibility when moving
+
         setAchievementsVisibility(false);
         setResumeVisibility(false);
         setSkillsVisibility(false);
 
+        // Reset moving state after animation
         setTimeout(() => {
           setIsMoving(false);
-        }, 400);
+        }, 150);
       } else {
         collisionSoundPlay();
         console.log("Cannot move to that position due to collision.");
-        setIsMoving(false);
       }
     },
     [
       currX,
       currY,
+      currentDirection,
+      isMoving,
       limits.x,
       limits.y,
       collisions,
@@ -255,24 +311,24 @@ export default function GameCanvas({
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (isMoving) return; // Prevent movement while already moving
+      if (isMoving) return;
 
       switch (event.key) {
         case "ArrowUp":
         case "w":
-          handleMove(2);
+          handleMove("front");
           break;
         case "ArrowDown":
         case "s":
-          handleMove(1);
+          handleMove("back");
           break;
         case "ArrowLeft":
         case "a":
-          handleMove(3);
+          handleMove("left");
           break;
         case "ArrowRight":
         case "d":
-          handleMove(4);
+          handleMove("right");
           break;
         case "Enter":
         case "e":
@@ -289,21 +345,20 @@ export default function GameCanvas({
   }, [handleMove, handleInteract, isMoving]);
 
   useEffect(() => {
-    if (!gbaPress) return;
-    if (isMoving) return; // Prevent movement while already moving
+    if (!gbaPress || isMoving) return;
 
     switch (gbaPress) {
       case "up":
-        handleMove(2);
+        handleMove("front");
         break;
       case "down":
-        handleMove(1);
+        handleMove("back");
         break;
       case "left":
-        handleMove(3);
+        handleMove("left");
         break;
       case "right":
-        handleMove(4);
+        handleMove("right");
         break;
       case "a":
       case "start":
@@ -318,10 +373,8 @@ export default function GameCanvas({
   function handleClickInteraction(type) {
     console.log("Clicked on interaction:", type);
     if (type === "certificate") {
-      // Toggle achievements visibility
       setAchievementsVisibility((prevVisibility) => !prevVisibility);
     } else if (type === "computer") {
-      // Toggle resume visibility
       setResumeVisibility((prevVisibility) => !prevVisibility);
     } else if (type === "bookshelf") {
       setSkillsVisibility((prevVisibility) => !prevVisibility);
@@ -332,7 +385,6 @@ export default function GameCanvas({
     <section className="flex h-full w-full">
       <div className="p-2 w-full md:h-[80vh] border-red-500">
         <Canvas camera={{ position: [5, 5, 8], fov: 60 }}>
-          {/* Disable OrbitControls as we're using a custom camera follower */}
           <OrbitControls enabled={false} />
           <Suspense fallback={null}>
             <RoomModel
@@ -340,7 +392,9 @@ export default function GameCanvas({
               interactionType={interactionType}
               onInteraction={handleClickInteraction}
             />
-            <PlayerModel isMoving={isMoving} position={pos} rotation={rot} />
+            <animated.group position={pos} rotation={rot}>
+              <PlayerModel isMoving={isMoving} />
+            </animated.group>
             <FollowCamera
               playerPosition={pos.get()}
               playerRotation={rot.get()}

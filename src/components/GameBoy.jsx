@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import GameCanvas from "@/components/GameCanvas";
 
 export default function GameBoy({
@@ -8,19 +9,28 @@ export default function GameBoy({
   setGbaPress,
   gbaPress,
 }) {
+  const [pressedButton, setPressedButton] = useState(null);
+
   function buttonHandler(pressed) {
     setGbaPress(pressed);
+  }
+
+  function handleMouseDown(button) {
+    setPressedButton(button);
+    console.log(`Button ${button} pressed`);
+    buttonHandler(button);
+  }
+
+  function handleMouseUp() {
+    setPressedButton(null);
   }
 
   return (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-t from-slate-800 to-slate-900">
       <div className="relative w-full h-full flex items-center justify-center">
-        {/* GameBoy Shell - now responsive */}
         <div className="bg-gradient-to-r from-violet-700 to-indigo-900 w-full max-w-[800px] h-[calc(100%-4rem)] max-h-[1200px] aspect-[11/17] rounded-t-xl flex flex-col items-center relative border-4 border-solid border-b-0 border-slate-900">
-          {/* Screen border - responsive */}
           <div className="bg-gradient-to-r from-black to-neutral-800 w-[90%] h-[50%] rounded-t-lg mt-4 flex items-center justify-center relative border-4 border-solid border-b-0 border-slate-800 shadow-[inset_1px_1px_0_0_rgba(255,255,255,0.15),inset_-1px_0_0_0_rgba(255,255,255,0.15)]">
-            {/* Screen - responsive */}
-            <div className="bg-[#8BAC0F] w-[80%] h-[80%] rounded-sm border-solid border-8 border-t-4 border-black border-opacity-90 flex items-center justify-center overflow-hidden">
+            <div className="bg-[#000000] w-[80%] h-[80%] rounded-sm border-solid border-8 border-t-4 border-black border-opacity-90 flex items-center justify-center overflow-hidden">
               <GameCanvas
                 setAchievementsVisibility={setAchievementsVisibility}
                 setResumeVisibility={setResumeVisibility}
@@ -113,40 +123,96 @@ export default function GameBoy({
 
             {/* Triangles */}
             <div
-              className="absolute top-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[16px] border-b-neutral-900 shadow-[0_1px_0_0_rgba(255,255,255,.2)] z-50"
-              onClick={() => buttonHandler("up")}
+              className={`absolute top-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[16px] ${
+                pressedButton === "up"
+                  ? "border-b-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
+                  : "border-b-neutral-900 shadow-[0_1px_0_0_rgba(255,255,255,.2)]"
+              } z-50 cursor-pointer transition-all duration-75`}
+              onMouseDown={() => handleMouseDown("up")}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={() => handleMouseDown("up")}
+              onTouchEnd={handleMouseUp}
             ></div>
             <div
-              className="absolute bottom-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[16px] border-t-neutral-800 z-50"
-              onClick={() => buttonHandler("down")}
+              className={`absolute bottom-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[16px] ${
+                pressedButton === "down"
+                  ? "border-t-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
+                  : "border-t-neutral-800 shadow-[0_-1px_0_0_rgba(255,255,255,.2)]"
+              } z-50 cursor-pointer transition-all duration-75`}
+              onMouseDown={() => handleMouseDown("down")}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={() => handleMouseDown("down")}
+              onTouchEnd={handleMouseUp}
             ></div>
 
             <div
-              className="absolute left-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[16px] border-r-neutral-900 shadow-[1px_0_0_0_rgba(255,255,255,.2)] z-50"
-              onClick={() => buttonHandler("left")}
+              className={`absolute left-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[16px] ${
+                pressedButton === "left"
+                  ? "border-r-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
+                  : "border-r-neutral-900 shadow-[1px_0_0_0_rgba(255,255,255,.2)]"
+              } z-50 cursor-pointer transition-all duration-75`}
+              onMouseDown={() => handleMouseDown("left")}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={() => handleMouseDown("left")}
+              onTouchEnd={handleMouseUp}
             ></div>
 
             <div
-              className="absolute right-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[16px] border-l-neutral-800 z-50"
-              onClick={() => buttonHandler("right")}
+              className={`absolute right-[10px] top-1/2 transform -translate-y-1/2 w-0 h-0 border-solid border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[16px] ${
+                pressedButton === "right"
+                  ? "border-l-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
+                  : "border-l-neutral-800 shadow-[-1px_0_0_0_rgba(255,255,255,.2)]"
+              } z-50 cursor-pointer transition-all duration-75`}
+              onMouseDown={() => handleMouseDown("right")}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={() => handleMouseDown("right")}
+              onTouchEnd={handleMouseUp}
             ></div>
           </div>
 
           {/* A and B buttons */}
           <div className="absolute right-[6%] bottom-[21%] w-28 h-16">
             <div
-              className="bg-gradient-to-br from-neutral-700 to-neutral-800 rounded-full w-12 h-12 absolute bottom-0 border-4 border-solid border-black border-b-2 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
-              onClick={() => buttonHandler("b")}
+              className={`${
+                pressedButton === "b"
+                  ? "bg-gradient-to-br from-neutral-800 to-neutral-900 shadow-[inset_2px_4px_8px_0_rgba(0,0,0,0.8),inset_1px_2px_1px_0_rgba(255,255,255,0.05)]"
+                  : "bg-gradient-to-br from-neutral-700 to-neutral-800 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
+              } rounded-full w-12 h-12 absolute bottom-0 border-4 border-solid border-black border-b-2 transition-all duration-75 cursor-pointer select-none`}
+              onMouseDown={() => handleMouseDown("b")}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={() => handleMouseDown("b")}
+              onTouchEnd={handleMouseUp}
             >
-              <span className="font-bold text-white absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xl">
+              <span
+                className={`font-bold text-white absolute ${
+                  pressedButton === "b" ? "bottom-0" : "bottom-1"
+                } left-1/2 transform -translate-x-1/2 text-xl transition-all duration-75`}
+              >
                 B
               </span>
             </div>
             <div
-              className="bg-gradient-to-br from-neutral-700 to-neutral-800 rounded-full h-12 w-12 absolute right-0 border-4 border-solid border-black border-b-2 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
-              onClick={() => buttonHandler("a")}
+              className={`${
+                pressedButton === "a"
+                  ? "bg-gradient-to-br from-neutral-800 to-neutral-900 shadow-[inset_2px_4px_8px_0_rgba(0,0,0,0.8),inset_1px_2px_1px_0_rgba(255,255,255,0.05)]"
+                  : "bg-gradient-to-br from-neutral-700 to-neutral-800 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
+              } rounded-full h-12 w-12 absolute right-0 border-4 border-solid border-black border-b-2 transition-all duration-75 cursor-pointer select-none`}
+              onMouseDown={() => handleMouseDown("a")}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={() => handleMouseDown("a")}
+              onTouchEnd={handleMouseUp}
             >
-              <span className="font-bold text-white absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xl">
+              <span
+                className={`font-bold text-white absolute ${
+                  pressedButton === "a" ? "bottom-0" : "bottom-1"
+                } left-1/2 transform -translate-x-1/2 text-xl transition-all duration-75`}
+              >
                 A
               </span>
             </div>
@@ -156,20 +222,48 @@ export default function GameBoy({
           <div className="absolute bottom-[4%] flex space-x-4">
             <div className="flex flex-col items-center">
               <div
-                className="bg-gradient-to-b from-slate-800 to-violet-700 w-12 h-5 rounded-full flex items-center justify-center"
-                onClick={() => buttonHandler("select")}
+                className={`${
+                  pressedButton === "help"
+                    ? "bg-gradient-to-b from-slate-900 to-violet-800 shadow-[inset_0_2px_8px_0_rgba(0,0,0,0.8)]"
+                    : "bg-gradient-to-b from-slate-800 to-violet-700 shadow-[0_2px_4px_0_rgba(0,0,0,0.3)]"
+                } w-12 h-5 rounded-full flex items-center justify-center cursor-pointer transition-all duration-75`}
+                onMouseDown={() => handleMouseDown("help")}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onTouchStart={() => handleMouseDown("help")}
+                onTouchEnd={handleMouseUp}
               >
-                <div className="bg-gradient-to-b from-neutral-700 via-neutral-600 to-neutral-900 shadow-[inset_-2px_-1px_10px_0_rgba(0,0,0,1)] w-[90%] h-[70%] rounded-full"></div>
+                <div
+                  className={`bg-gradient-to-b from-neutral-700 via-neutral-600 to-neutral-900 ${
+                    pressedButton === "help"
+                      ? "shadow-[inset_-1px_-1px_6px_0_rgba(0,0,0,1)]"
+                      : "shadow-[inset_-2px_-1px_10px_0_rgba(0,0,0,1)]"
+                  } w-[90%] h-[70%] rounded-full transition-all duration-75`}
+                ></div>
               </div>
-              <div className="text-violet-700 text-sm">SELECT</div>
+              <div className="text-violet-700 text-sm">HELP</div>
             </div>
 
             <div className="flex flex-col items-center">
               <div
-                className="bg-gradient-to-b from-slate-800 to-violet-700 w-12 h-5 rounded-full flex items-center justify-center"
-                onClick={() => buttonHandler("start")}
+                className={`${
+                  pressedButton === "start"
+                    ? "bg-gradient-to-b from-slate-900 to-violet-800 shadow-[inset_0_2px_8px_0_rgba(0,0,0,0.8)]"
+                    : "bg-gradient-to-b from-slate-800 to-violet-700 shadow-[0_2px_4px_0_rgba(0,0,0,0.3)]"
+                } w-12 h-5 rounded-full flex items-center justify-center cursor-pointer transition-all duration-75`}
+                onMouseDown={() => handleMouseDown("start")}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onTouchStart={() => handleMouseDown("start")}
+                onTouchEnd={handleMouseUp}
               >
-                <div className="bg-gradient-to-b from-neutral-700 via-neutral-600 to-neutral-900 shadow-[inset_-2px_-1px_10px_0_rgba(0,0,0,1)] w-[90%] h-[70%] rounded-full"></div>
+                <div
+                  className={`bg-gradient-to-b from-neutral-700 via-neutral-600 to-neutral-900 ${
+                    pressedButton === "start"
+                      ? "shadow-[inset_-1px_-1px_6px_0_rgba(0,0,0,1)]"
+                      : "shadow-[inset_-2px_-1px_10px_0_rgba(0,0,0,1)]"
+                  } w-[90%] h-[70%] rounded-full transition-all duration-75`}
+                ></div>
               </div>
               <div className="text-violet-700 text-sm">START</div>
             </div>
