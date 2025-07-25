@@ -9,16 +9,20 @@ import useSound from "use-sound";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
-// Camera component that follows the player
-function FollowCamera({ playerPosition, playerRotation }) {
+// Cinematic camera component that follows the player
+function FollowCamera({ playerPosition, playerRotation, isMoving }) {
   const { camera } = useThree();
   const cameraRef = useRef({
     position: new THREE.Vector3(5, 5, 8),
     target: new THREE.Vector3(5.5, 0, 3.5),
+    shake: { x: 0, y: 0, z: 0 },
+    bobOffset: 0,
   });
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!playerPosition) return;
+
+    const time = state.clock.elapsedTime;
 
     // Calculate camera position based on player's position and orientation
     const playerPos = new THREE.Vector3(
@@ -30,12 +34,25 @@ function FollowCamera({ playerPosition, playerRotation }) {
     // Extract player's orientation (rotation)
     const [_, rotY] = playerRotation;
 
-    // Calculate offset based on player rotation (camera should be behind player)
-    const distance = 4; // Distance from player
-    const height = 3.5; // Height above player
+    // Dynamic camera settings based on movement
+    const baseDistance = 4.5;
+    const baseHeight = 3.8;
+
+    // Add slight camera bob when moving (like breathing or walking rhythm)
+    let bobAmount = 0;
+    if (isMoving) {
+      bobAmount = Math.sin(time * 6) * 0.08; // Subtle bob when moving
+    }
+
+    // Calculate offset based on player rotation (camera should be behind and slightly offset)
+    const distance = baseDistance + (isMoving ? 0.3 : 0); // Pull back slightly when moving
+    const height = baseHeight + bobAmount;
+
+    // Add slight side offset for more dynamic angle
+    const sideOffset = Math.sin(rotY) * 0.5;
 
     const cameraOffset = new THREE.Vector3(
-      -Math.sin(rotY) * distance,
+      -Math.sin(rotY) * distance + sideOffset,
       height,
       -Math.cos(rotY) * distance
     );
@@ -43,14 +60,36 @@ function FollowCamera({ playerPosition, playerRotation }) {
     // Calculate target camera position
     const targetCameraPos = playerPos.clone().add(cameraOffset);
 
-    // Smooth interpolation for camera position
-    cameraRef.current.position.lerp(targetCameraPos, 0.05);
+    // Smooth interpolation for camera position with different speeds for different scenarios
+    const lerpSpeed = isMoving ? 0.04 : 0.02; // Slower when stationary for more cinematic feel
+    cameraRef.current.position.lerp(targetCameraPos, lerpSpeed);
 
     // Set camera position
     camera.position.copy(cameraRef.current.position);
 
-    // Make camera look at player
-    camera.lookAt(playerPos);
+    // Look at point slightly ahead of player when moving for more cinematic feel
+    const lookAtTarget = playerPos.clone();
+    if (isMoving) {
+      const forwardOffset = new THREE.Vector3(
+        Math.sin(rotY) * 1.5,
+        0.2, // Look slightly up when moving
+        Math.cos(rotY) * 1.5
+      );
+      lookAtTarget.add(forwardOffset);
+    }
+
+    // Smooth camera rotation
+    const currentLookAt = cameraRef.current.target;
+    currentLookAt.lerp(lookAtTarget, 0.05);
+    camera.lookAt(currentLookAt);
+
+    // Add subtle camera shake when moving for more immersion
+    if (isMoving) {
+      const shakeIntensity = 0.02;
+      camera.position.x += (Math.random() - 0.5) * shakeIntensity;
+      camera.position.y += (Math.random() - 0.5) * shakeIntensity * 0.5;
+      camera.position.z += (Math.random() - 0.5) * shakeIntensity;
+    }
   });
 
   return null;
@@ -166,8 +205,8 @@ export default function GameCanvas({
     pos: [currX, 0, currY],
     rot: orientation,
     config: {
-      tension: 300,
-      friction: 30,
+      tension: 120,
+      friction: 25,
       duration: undefined, // Remove fixed duration for smoother movement
     },
   });
@@ -288,7 +327,7 @@ export default function GameCanvas({
         // Reset moving state after animation
         setTimeout(() => {
           setIsMoving(false);
-        }, 150);
+        }, 400); // Longer duration to match slower movement
       } else {
         collisionSoundPlay();
         console.log("Cannot move to that position due to collision.");
@@ -306,6 +345,7 @@ export default function GameCanvas({
       setResumeVisibility,
       setSkillsVisibility,
       collisionSoundPlay,
+      checkInteractions,
     ]
   );
 
@@ -398,6 +438,7 @@ export default function GameCanvas({
             <FollowCamera
               playerPosition={pos.get()}
               playerRotation={rot.get()}
+              isMoving={isMoving}
             />
           </Suspense>
         </Canvas>
