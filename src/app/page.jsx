@@ -13,7 +13,7 @@ const modals = {
 
 const GameBoy = dynamic(() => import("@/components/GameBoy"), {
   ssr: false,
-  loading: () => <div>Loading...</div>,
+  loading: () => <div className="text-white">Loading Console...</div>,
 });
 
 export default function Home() {
@@ -41,10 +41,18 @@ export default function Home() {
     );
   };
 
-  if (!hasMounted) return null; // Avoid mismatch during hydration
+  if (!hasMounted) {
+    return (
+      <main className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden">
+        <div className="text-white">Loading...</div>
+      </main>
+    );
+  }
 
   return (
-    <main className="w-screen h-screen flex flex-col bg-black overflow-hidden">
+    // UPDATED: Changed flex-col to flex and added items-center, justify-center, and padding
+    // This will perfectly center the content (either GameBoy or GameCanvas) in the screen.
+    <main className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden p-2 sm:p-4">
       {isClientMobile ? (
         <>
           <GameBoy
