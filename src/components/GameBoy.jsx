@@ -11,17 +11,61 @@ export default function GameBoy({
 }) {
   const [pressedButton, setPressedButton] = useState(null);
 
+  const [lastTouchTime, setLastTouchTime] = useState(0);
+
   function buttonHandler(pressed) {
     setGbaPress(pressed);
   }
 
-  function handleMouseDown(button) {
+  function handleMouseDown(button, event) {
+    event.preventDefault();
+
+    // Prevent mouse events that fire after touch events
+    const now = Date.now();
+    if (event.type === "mousedown" && now - lastTouchTime < 500) {
+      return;
+    }
+
+    // Also check sourceCapabilities as fallback
+    if (
+      event.type === "mousedown" &&
+      event.sourceCapabilities?.firesTouchEvents
+    ) {
+      return;
+    }
+
     setPressedButton(button);
     console.log(`Button ${button} pressed`);
     buttonHandler(button);
   }
 
-  function handleMouseUp() {
+  function handleMouseUp(event) {
+    const now = Date.now();
+    if (event && event.type === "mouseup" && now - lastTouchTime < 500) {
+      return;
+    }
+
+    if (
+      event &&
+      event.type === "mouseup" &&
+      event.sourceCapabilities?.firesTouchEvents
+    ) {
+      return;
+    }
+
+    setPressedButton(null);
+  }
+
+  function handleTouchStart(button, event) {
+    event.preventDefault();
+    setLastTouchTime(Date.now());
+    setPressedButton(button);
+    console.log(`Button ${button} pressed (touch)`);
+    buttonHandler(button);
+  }
+
+  function handleTouchEnd(event) {
+    event.preventDefault();
     setPressedButton(null);
   }
 
@@ -128,11 +172,11 @@ export default function GameBoy({
                   ? "border-b-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
                   : "border-b-neutral-900 shadow-[0_1px_0_0_rgba(255,255,255,.2)]"
               } z-50 cursor-pointer transition-all duration-75`}
-              onMouseDown={() => handleMouseDown("up")}
+              onMouseDown={(e) => handleMouseDown("up", e)}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              onTouchStart={() => handleMouseDown("up")}
-              onTouchEnd={handleMouseUp}
+              onTouchStart={(e) => handleTouchStart("up", e)}
+              onTouchEnd={handleTouchEnd}
             ></div>
             <div
               className={`absolute bottom-[10px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-solid border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[16px] ${
@@ -140,11 +184,11 @@ export default function GameBoy({
                   ? "border-t-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
                   : "border-t-neutral-800 shadow-[0_-1px_0_0_rgba(255,255,255,.2)]"
               } z-50 cursor-pointer transition-all duration-75`}
-              onMouseDown={() => handleMouseDown("down")}
+              onMouseDown={(e) => handleMouseDown("down", e)}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              onTouchStart={() => handleMouseDown("down")}
-              onTouchEnd={handleMouseUp}
+              onTouchStart={(e) => handleTouchStart("down", e)}
+              onTouchEnd={handleTouchEnd}
             ></div>
 
             <div
@@ -153,11 +197,11 @@ export default function GameBoy({
                   ? "border-r-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
                   : "border-r-neutral-900 shadow-[1px_0_0_0_rgba(255,255,255,.2)]"
               } z-50 cursor-pointer transition-all duration-75`}
-              onMouseDown={() => handleMouseDown("left")}
+              onMouseDown={(e) => handleMouseDown("left", e)}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              onTouchStart={() => handleMouseDown("left")}
-              onTouchEnd={handleMouseUp}
+              onTouchStart={(e) => handleTouchStart("left", e)}
+              onTouchEnd={handleTouchEnd}
             ></div>
 
             <div
@@ -166,11 +210,11 @@ export default function GameBoy({
                   ? "border-l-neutral-600 shadow-[0_0_0_0_rgba(255,255,255,0)]"
                   : "border-l-neutral-800 shadow-[-1px_0_0_0_rgba(255,255,255,.2)]"
               } z-50 cursor-pointer transition-all duration-75`}
-              onMouseDown={() => handleMouseDown("right")}
+              onMouseDown={(e) => handleMouseDown("right", e)}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              onTouchStart={() => handleMouseDown("right")}
-              onTouchEnd={handleMouseUp}
+              onTouchStart={(e) => handleTouchStart("right", e)}
+              onTouchEnd={handleTouchEnd}
             ></div>
           </div>
 
@@ -182,10 +226,10 @@ export default function GameBoy({
                   ? "bg-gradient-to-br from-neutral-800 to-neutral-900 shadow-[inset_2px_4px_8px_0_rgba(0,0,0,0.8),inset_1px_2px_1px_0_rgba(255,255,255,0.05)]"
                   : "bg-gradient-to-br from-neutral-700 to-neutral-800 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
               } rounded-full w-12 h-12 absolute bottom-0 border-4 border-solid border-black border-b-2 transition-all duration-75 cursor-pointer select-none`}
-              onMouseDown={() => handleMouseDown("b")}
+              onMouseDown={(e) => handleMouseDown("b", e)}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              onTouchStart={() => handleMouseDown("b")}
+              onTouchStart={(e) => handleMouseDown("b", e)}
               onTouchEnd={handleMouseUp}
             >
               <span
@@ -202,10 +246,10 @@ export default function GameBoy({
                   ? "bg-gradient-to-br from-neutral-800 to-neutral-900 shadow-[inset_2px_4px_8px_0_rgba(0,0,0,0.8),inset_1px_2px_1px_0_rgba(255,255,255,0.05)]"
                   : "bg-gradient-to-br from-neutral-700 to-neutral-800 shadow-[inset_1px_2px_1px_0_rgba(255,255,255,0.15),2px_2px_1px_0_rgba(0,0,0,0.25)]"
               } rounded-full h-12 w-12 absolute right-0 border-4 border-solid border-black border-b-2 transition-all duration-75 cursor-pointer select-none`}
-              onMouseDown={() => handleMouseDown("a")}
+              onMouseDown={(e) => handleMouseDown("a", e)}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              onTouchStart={() => handleMouseDown("a")}
+              onTouchStart={(e) => handleMouseDown("a", e)}
               onTouchEnd={handleMouseUp}
             >
               <span
@@ -227,10 +271,10 @@ export default function GameBoy({
                     ? "bg-gradient-to-b from-slate-900 to-violet-800 shadow-[inset_0_2px_8px_0_rgba(0,0,0,0.8)]"
                     : "bg-gradient-to-b from-slate-800 to-violet-700 shadow-[0_2px_4px_0_rgba(0,0,0,0.3)]"
                 } w-12 h-5 rounded-full flex items-center justify-center cursor-pointer transition-all duration-75`}
-                onMouseDown={() => handleMouseDown("help")}
+                onMouseDown={(e) => handleMouseDown("help", e)}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
-                onTouchStart={() => handleMouseDown("help")}
+                onTouchStart={(e) => handleMouseDown("help", e)}
                 onTouchEnd={handleMouseUp}
               >
                 <div
@@ -251,10 +295,10 @@ export default function GameBoy({
                     ? "bg-gradient-to-b from-slate-900 to-violet-800 shadow-[inset_0_2px_8px_0_rgba(0,0,0,0.8)]"
                     : "bg-gradient-to-b from-slate-800 to-violet-700 shadow-[0_2px_4px_0_rgba(0,0,0,0.3)]"
                 } w-12 h-5 rounded-full flex items-center justify-center cursor-pointer transition-all duration-75`}
-                onMouseDown={() => handleMouseDown("start")}
+                onMouseDown={(e) => handleMouseDown("start", e)}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
-                onTouchStart={() => handleMouseDown("start")}
+                onTouchStart={(e) => handleMouseDown("start", e)}
                 onTouchEnd={handleMouseUp}
               >
                 <div
