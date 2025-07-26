@@ -16,6 +16,11 @@ const GameBoy = dynamic(() => import("@/components/GameBoy"), {
   loading: () => <div className="text-white">Loading Console...</div>,
 });
 
+const Handheld = dynamic(() => import("@/components/Handheld"), {
+  ssr: false,
+  loading: () => <div className="text-white">Loading Console...</div>,
+});
+
 export default function Home() {
   const [activeModal, setActiveModal] = useState(null);
   const [isClientMobile, setIsClientMobile] = useState(false);
@@ -50,8 +55,6 @@ export default function Home() {
   }
 
   return (
-    // UPDATED: Changed flex-col to flex and added items-center, justify-center, and padding
-    // This will perfectly center the content (either GameBoy or GameCanvas) in the screen.
     <main className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden p-2 sm:p-4">
       {isClientMobile ? (
         <>
@@ -72,7 +75,7 @@ export default function Home() {
         </>
       ) : (
         <>
-          <GameCanvas
+          <Handheld
             setAchievementsVisibility={(b) =>
               b ? setActiveModal("AchievementsModal") : setActiveModal(null)
             }
@@ -82,6 +85,8 @@ export default function Home() {
             setSkillsVisibility={(b) =>
               b ? setActiveModal("SkillsModal") : setActiveModal(null)
             }
+            setGbaPress={setGbaPress}
+            gbaPress={gbaPress}
           />
           {renderModal()}
         </>

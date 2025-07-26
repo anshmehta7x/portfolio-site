@@ -102,13 +102,12 @@ export default function GameCanvas({
   gbaPress,
   setGbaPress,
 }) {
-  const [currX, setCurrX] = useState(2.5); // spawn player at 5.5, 3.5
+  const [currX, setCurrX] = useState(2.5); // spawn player at 2.5, 1.5
   const [currY, setCurrY] = useState(1.5);
   const [isMoving, setIsMoving] = useState(false);
   const [computerTint, setComputerTint] = useState(false);
   const [interactionType, setInteractionType] = useState(null);
-  const [currentDirection, setCurrentDirection] = useState(2); // Start facing up (2)
-
+  const [currentDirection, setCurrentDirection] = useState(2);
   const [collisionSoundPlay] = useSound(collisionsound);
 
   const limits = {
