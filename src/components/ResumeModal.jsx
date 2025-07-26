@@ -1,9 +1,9 @@
-import Image from "next/image";
+"use client";
 
 export default function ResumeModal({ visibility, onClose }) {
   const handleDownload = () => {
     window.open(
-      "https://github.com/anshmehta7x/resume/raw/main/my%20cv.docx",
+      "https://github.com/anshmehta7x/resume/blob/main/ansh-mehta-resume.pdf",
       "_blank"
     );
   };
@@ -12,43 +12,40 @@ export default function ResumeModal({ visibility, onClose }) {
     <section
       className={`${
         visibility ? "flex" : "hidden"
-      } h-screen w-screen justify-center fixed items-center top-0 z-10`}
+      } h-screen w-screen justify-center fixed items-center top-0 z-10 bg-black/60`}
     >
-      <div className="bg-slate-500 h-[25vh] w-[25vw] fixed z-20 pixel-border overflow-auto">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-white hover:text-gray-300 focus:outline-none"
-          aria-label="Close modal"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+      {/* Computer Screen Modal */}
+      <div className="bg-gray-800 border-4 border-gray-600 rounded-lg shadow-2xl w-96 h-64">
+        {/* Screen Header */}
+        <div className="bg-blue-600 border-b-2 border-gray-600 p-2 flex justify-between items-center">
+          <span className="text-white font-arcade text-sm">COMPUTER</span>
+          <button
+            onClick={onClose}
+            className="text-white hover:text-gray-300 font-arcade text-lg"
+            aria-label="Close"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-        <h1
-          className="text-white text-4xl font-arcade text-center mt-8 cursor-pointer hover:underline glow-text"
-          onClick={handleDownload}
-        >
-          Download Resume
-        </h1>
-        <Image
-          src="download-symbol.svg"
-          alt="Download symbol"
-          width={100}
-          height={100}
-          className="mx-auto mt-2 cursor-pointer"
-          onClick={handleDownload}
-        />
+            ×
+          </button>
+        </div>
+
+        {/* Screen Content */}
+        <div className="p-6 h-full flex flex-col justify-center items-center space-y-6">
+          <div className="text-center space-y-4">
+            <p className="text-green-400 font-pixeboy text-lg">
+              ANSH_MEHTA.RESUME
+            </p>
+            <p className="text-white font-arcade text-sm">
+              FILE READY FOR DOWNLOAD
+            </p>
+          </div>
+
+          <button
+            onClick={handleDownload}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-arcade text-sm px-6 py-3 border-2 border-blue-400 transition-colors duration-200"
+          >
+            DOWNLOAD
+          </button>
+        </div>
       </div>
     </section>
   );
