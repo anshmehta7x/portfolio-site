@@ -1,7 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, Suspense } from "react";
 import GameCanvas from "@/components/GameCanvas";
+
+const AchievementsModal = React.lazy(() =>
+  import("@/components/AchievementsModal")
+);
+const ResumeModal = React.lazy(() => import("@/components/ResumeModal"));
+const SkillsModal = React.lazy(() => import("@/components/SkillsModal"));
+
+const modals = {
+  AchievementsModal,
+  ResumeModal,
+  SkillsModal,
+};
 
 export default function HandheldConsole({
   setAchievementsVisibility,
@@ -9,6 +21,8 @@ export default function HandheldConsole({
   setSkillsVisibility,
   setGbaPress,
   gbaPress,
+  activeModal,
+  closeModal,
 }) {
   const [pressedButton, setPressedButton] = useState(null);
   const [lastTouchTime, setLastTouchTime] = useState(0);
@@ -54,13 +68,25 @@ export default function HandheldConsole({
     setPressedButton(null);
   }
 
+  const renderConstrainedModal = () => {
+    if (!activeModal) return null;
+    const ModalComponent = modals[activeModal];
+
+    return (
+      <Suspense fallback={<div className="text-white">Loading Modal...</div>}>
+        <ModalComponent
+          visibility={!!activeModal}
+          onClose={closeModal}
+          isConstrained={true}
+        />
+      </Suspense>
+    );
+  };
+
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
-      {/* Game Boy Console Body */}
       <div className="w-full h-full bg-gradient-to-r from-violet-700 to-indigo-900 rounded-3xl flex items-center justify-between p-6 shadow-2xl border-4 border-slate-900 relative">
-        {/* Left Side - D-Pad and HELP */}
         <div className="flex flex-col items-center justify-center space-y-16 w-36">
-          {/* HELP Button */}
           <div className="flex flex-col items-center space-y-3">
             <div
               className={`${
@@ -87,20 +113,12 @@ export default function HandheldConsole({
             </div>
           </div>
 
-          {/* D-Pad */}
           <div className="relative w-36 h-36">
-            {/* D-Pad Base */}
             <div className="bg-black rounded-md w-16 h-full absolute left-1/2 transform -translate-x-1/2"></div>
             <div className="bg-black rounded-md h-16 w-full absolute top-1/2 transform -translate-y-1/2"></div>
-
-            {/* D-Pad Arms */}
             <div className="bg-gradient-to-b from-neutral-800 to-neutral-700 rounded-sm w-14 h-full absolute left-1/2 transform -translate-x-1/2 border-t-4 border-b-4 border-solid border-black shadow-[inset_0_2px_4px_0_rgba(255,255,255,0.3),inset_0_-2px_4px_0_rgba(0,0,0,0.8)]"></div>
             <div className="bg-gradient-to-r from-neutral-800 to-neutral-700 rounded-sm h-14 w-full absolute top-1/2 transform -translate-y-1/2 border-l-4 border-r-4 border-solid border-black shadow-[inset_2px_0_4px_0_rgba(255,255,255,0.3),inset_-2px_0_4px_0_rgba(0,0,0,0.8)]"></div>
-
-            {/* Center Circle */}
             <div className="bg-gradient-to-br from-neutral-800 to-neutral-700 rounded-full w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-[inset_2px_2px_4px_0_rgba(0,0,0,0.75),2px_2px_4px_0_rgba(255,255,255,.2)] z-10"></div>
-
-            {/* D-Pad Buttons */}
             <div
               className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-[calc(50%-16px)] cursor-pointer z-20 rounded-t-lg"
               onMouseDown={(e) => handleMouseDown("up", e)}
@@ -168,11 +186,8 @@ export default function HandheldConsole({
           </div>
         </div>
 
-        {/* Center - Screen */}
         <div className="flex-1 h-full flex flex-col items-center justify-center mx-8">
-          {/* Screen Container */}
           <div className="w-full h-full bg-gradient-to-r from-black to-neutral-800 rounded-2xl p-8 shadow-[inset_1px_1px_0_0_rgba(255,255,255,0.15),inset_-1px_0_0_0_rgba(255,255,255,0.15)] border-4 border-slate-800">
-            {/* Screen Bezel */}
             <div className="w-full h-full bg-black rounded-lg border-8 border-black border-opacity-90 overflow-hidden relative">
               <GameCanvas
                 setAchievementsVisibility={setAchievementsVisibility}
@@ -181,10 +196,10 @@ export default function HandheldConsole({
                 gbaPress={gbaPress}
                 setGbaPress={setGbaPress}
               />
+              {renderConstrainedModal()}
             </div>
           </div>
 
-          {/* Speaker Grilles */}
           <div className="flex space-x-3 mt-6">
             {[...Array(8)].map((_, i) => (
               <div
@@ -195,9 +210,7 @@ export default function HandheldConsole({
           </div>
         </div>
 
-        {/* Right Side - A/B Buttons and START */}
         <div className="flex flex-col items-center justify-center space-y-16 w-36">
-          {/* START Button */}
           <div className="flex flex-col items-center space-y-3">
             <div
               className={`${
@@ -224,9 +237,7 @@ export default function HandheldConsole({
             </div>
           </div>
 
-          {/* A and B Buttons */}
           <div className="relative w-40 h-20">
-            {/* B Button (Left) */}
             <div
               className={`${
                 pressedButton === "b"
@@ -248,7 +259,6 @@ export default function HandheldConsole({
               </span>
             </div>
 
-            {/* A Button (Right) */}
             <div
               className={`${
                 pressedButton === "a"

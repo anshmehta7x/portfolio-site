@@ -30,7 +30,11 @@ const achievements = [
   },
 ];
 
-export default function AchievementsModal({ visibility, onClose }) {
+export default function AchievementsModal({
+  visibility,
+  onClose,
+  isConstrained = false,
+}) {
   const [openItems, setOpenItems] = useState({});
 
   const handleToggle = (index) => {
@@ -40,17 +44,20 @@ export default function AchievementsModal({ visibility, onClose }) {
     }));
   };
 
+  const sectionClasses = isConstrained
+    ? "absolute inset-0 w-full h-full justify-center items-center bg-black bg-opacity-50 z-50"
+    : "fixed h-screen w-screen justify-center items-center top-0 bg-black bg-opacity-50 z-[9999]";
+
+  const contentContainerClasses = isConstrained
+    ? "w-full h-full flex flex-col border-4 border-[#2A2B3F] rounded-[1rem] shadow-lg"
+    : "fixed z-[100] w-[95vw] md:w-[85vw] h-[90vh] md:h-[85vh] flex flex-col border-4 border-[#2A2B3F] rounded-[1rem] shadow-lg";
+
   return (
-    <section
-      className={`${
-        visibility ? "flex" : "hidden"
-      } h-screen w-screen justify-center items-center fixed top-0 bg-black bg-opacity-50 z-[9999]`}
-    >
-      <div className="fixed z-[100] w-[95vw] md:w-[85vw] h-[90vh] md:h-[85vh] flex flex-col border-4 border-[#2A2B3F] rounded-[1rem] shadow-lg">
+    <section className={`${visibility ? "flex" : "hidden"} ${sectionClasses}`}>
+      <div className={contentContainerClasses}>
         <div className="w-full h-full p-2 md:p-4 bg-[#2A2B3F] rounded-[0.8rem]">
           <div className="w-full h-full p-2 md:p-4 bg-[#E8A87C] rounded-[0.6rem]">
             <div className="w-full h-full p-2 md:p-4 bg-[#F7F7F7] rounded-[0.4rem] flex flex-col">
-              {/* Close Button */}
               <div className="relative">
                 <button
                   onClick={onClose}
@@ -74,7 +81,6 @@ export default function AchievementsModal({ visibility, onClose }) {
                 </button>
               </div>
 
-              {/* Heading */}
               <h1 className="text-[#2A2B3F] text-2xl md:text-4xl font-arcade text-center mt-8 md:mt-10 mb-4 tracking-wide">
                 Achievements
                 <br />
@@ -83,7 +89,6 @@ export default function AchievementsModal({ visibility, onClose }) {
                 Certificates
               </h1>
 
-              {/* Content */}
               <div className="flex-grow overflow-auto px-2 md:px-[5vw] pb-6 md:pb-10 scrollbar-hide">
                 <Accordion variant="splitted" showDivider={false} hideIndicator>
                   {achievements.map((achievement, index) => (

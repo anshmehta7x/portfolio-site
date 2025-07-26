@@ -32,14 +32,22 @@ const skills = [
   { name: "OpenCV", icon: "👁️", color: "#5C3EE8" },
 ];
 
-export default function SkillsModal({ visibility, onClose }) {
+export default function SkillsModal({
+  visibility,
+  onClose,
+  isConstrained = false,
+}) {
+  const sectionClasses = isConstrained
+    ? "absolute inset-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50"
+    : "fixed h-screen w-screen flex justify-center items-center bg-black bg-opacity-50";
+
+  const contentContainerClasses = isConstrained
+    ? "bg-slate-800 h-full w-full pixel-border rounded-lg flex flex-col overflow-hidden"
+    : "bg-slate-800 h-[85vh] w-[85vw] fixed z-100 pixel-border rounded-lg flex flex-col overflow-hidden";
+
   return (
-    <section
-      className={`${
-        visibility ? "flex" : "hidden"
-      } h-screen w-screen justify-center fixed items-center bg-black bg-opacity-50 `}
-    >
-      <div className="bg-slate-800 h-[85vh] w-[85vw] fixed z-100 pixel-border rounded-lg flex flex-col overflow-hidden ">
+    <section className={`${visibility ? "flex" : "hidden"} ${sectionClasses}`}>
+      <div className={contentContainerClasses}>
         <div className="p-4 relative">
           <button
             onClick={onClose}

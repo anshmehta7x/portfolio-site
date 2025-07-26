@@ -1,6 +1,5 @@
 "use client";
 
-import GameCanvas from "@/components/GameCanvas";
 import React, { useState, useEffect } from "react";
 import isMobile from "is-mobile";
 import dynamic from "next/dynamic";
@@ -34,7 +33,14 @@ export default function Home() {
 
   const closeModal = () => setActiveModal(null);
 
-  const renderModal = () => {
+  useEffect(() => {
+    if (gbaPress === "b" && activeModal) {
+      closeModal();
+      setGbaPress(""); // Reset the button press
+    }
+  }, [gbaPress, activeModal]);
+
+  const renderFullScreenModal = () => {
     if (!activeModal) return null;
     const ModalComponent = modals[activeModal];
     const LazyModal = React.lazy(ModalComponent);
@@ -71,7 +77,7 @@ export default function Home() {
             setGbaPress={setGbaPress}
             gbaPress={gbaPress}
           />
-          {renderModal()}
+          {renderFullScreenModal()}
         </>
       ) : (
         <>
@@ -87,8 +93,9 @@ export default function Home() {
             }
             setGbaPress={setGbaPress}
             gbaPress={gbaPress}
+            activeModal={activeModal}
+            closeModal={closeModal}
           />
-          {renderModal()}
         </>
       )}
     </main>
