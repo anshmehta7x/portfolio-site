@@ -20,6 +20,7 @@ import {
     Link as LinkIcon,
     HardHat,
     Hammer,
+    SheetIcon,
 } from "lucide-react";
 
 const skillsData = [
@@ -68,6 +69,7 @@ const skillsData = [
             { name: "Ethereum", icon: <LinkIcon size={22} /> },
             { name: "Hardhat", icon: <HardHat size={22} /> },
             { name: "Foundry", icon: <Hammer size={22} /> },
+            { name: "Smart Contracts", icon: <SheetIcon size={22} /> },
         ],
     },
 ];

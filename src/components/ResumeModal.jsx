@@ -26,7 +26,7 @@ export default function ResumeModal({
         >
             <div className={contentContainerClasses}>
                 <div className="bg-blue-600 border-b-2 border-gray-600 p-2 flex justify-between items-center">
-                    <span className="text-white font-arcade text-sm">
+                    <span className="text-white font-arcade text-xl">
                         COMPUTER
                     </span>
                     <button
@@ -40,17 +40,17 @@ export default function ResumeModal({
 
                 <div className="p-6 flex-grow flex flex-col justify-center items-center space-y-6">
                     <div className="text-center space-y-4">
-                        <p className="text-green-400 font-pixeboy text-lg">
-                            ANSH_MEHTA.RESUME
+                        <p className="text-green-400 font-pixeboy text-4xl">
+                            ANSH_MEHTA_RESUME.PDF
                         </p>
-                        <p className="text-white font-arcade text-sm">
+                        <p className="text-white font-arcade text-4xl">
                             FILE READY FOR DOWNLOAD
                         </p>
                     </div>
 
                     <button
                         onClick={handleDownload}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-arcade text-sm px-6 py-3 border-2 border-blue-400 transition-colors duration-200"
+                        className="bg-blue-600 hover:bg-blue-500 text-white font-arcade text-4xl px-6 py-3 border-2 border-blue-400 transition-colors duration-200"
                     >
                         DOWNLOAD
                     </button>

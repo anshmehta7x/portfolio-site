@@ -88,6 +88,7 @@ export default function GameCanvas({
     setSkillsVisibility,
     gbaPress,
     setGbaPress,
+    setProjectsVisibility,
 }) {
     const [currX, setCurrX] = useState(2.5);
     const [currY, setCurrY] = useState(1.5);
@@ -204,6 +205,8 @@ export default function GameCanvas({
                 setResumeVisibility((prevVisibility) => !prevVisibility);
             } else if (interactionType === "bookshelf") {
                 setSkillsVisibility((prevVisibility) => !prevVisibility);
+            } else if (interactionType === "television") {
+                setProjectsVisibility((prevVisibility) => !prevVisibility);
             }
             setInteractionType(null);
         }
@@ -212,6 +215,7 @@ export default function GameCanvas({
         setAchievementsVisibility,
         setResumeVisibility,
         setSkillsVisibility,
+        setProjectsVisibility,
     ]);
 
     const getRelativeDirection = (input, currentFacing) => {
@@ -402,7 +406,10 @@ export default function GameCanvas({
             setResumeVisibility((prevVisibility) => !prevVisibility);
         } else if (type === "bookshelf") {
             setSkillsVisibility((prevVisibility) => !prevVisibility);
+        } else if (type === "television") {
+            setProjectsVisibility((prevVisibility) => !prevVisibility);
         }
+        setInteractionType(null);
     }
 
     return (
