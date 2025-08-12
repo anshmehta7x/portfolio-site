@@ -9,7 +9,6 @@ import useSound from "use-sound";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
-// Cinematic camera component that follows the player
 function FollowCamera({ playerPosition, playerRotation, isMoving }) {
     const { camera } = useThree();
     const cameraRef = useRef({
@@ -24,31 +23,25 @@ function FollowCamera({ playerPosition, playerRotation, isMoving }) {
 
         const time = state.clock.elapsedTime;
 
-        // Calculate camera position based on player's position and orientation
         const playerPos = new THREE.Vector3(
             playerPosition[0],
             0,
             playerPosition[2],
         );
 
-        // Extract player's orientation (rotation)
         const [_, rotY] = playerRotation;
 
-        // Dynamic camera settings based on movement
         const baseDistance = 4.5;
         const baseHeight = 3.8;
 
-        // Add slight camera bob when moving (like breathing or walking rhythm)
         let bobAmount = 0;
         if (isMoving) {
-            bobAmount = Math.sin(time * 6) * 0.08; // Subtle bob when moving
+            bobAmount = Math.sin(time * 6) * 0.08;
         }
 
-        // Calculate offset based on player rotation (camera should be behind and slightly offset)
-        const distance = baseDistance + (isMoving ? 0.3 : 0); // Pull back slightly when moving
+        const distance = baseDistance + (isMoving ? 0.3 : 0);
         const height = baseHeight + bobAmount;
 
-        // Add slight side offset for more dynamic angle
         const sideOffset = Math.sin(rotY) * 0.5;
 
         const cameraOffset = new THREE.Vector3(
@@ -57,33 +50,27 @@ function FollowCamera({ playerPosition, playerRotation, isMoving }) {
             -Math.cos(rotY) * distance,
         );
 
-        // Calculate target camera position
         const targetCameraPos = playerPos.clone().add(cameraOffset);
 
-        // Smooth interpolation for camera position with different speeds for different scenarios
-        const lerpSpeed = isMoving ? 0.04 : 0.02; // Slower when stationary for more cinematic feel
+        const lerpSpeed = isMoving ? 0.04 : 0.02;
         cameraRef.current.position.lerp(targetCameraPos, lerpSpeed);
 
-        // Set camera position
         camera.position.copy(cameraRef.current.position);
 
-        // Look at point slightly ahead of player when moving for more cinematic feel
         const lookAtTarget = playerPos.clone();
         if (isMoving) {
             const forwardOffset = new THREE.Vector3(
                 Math.sin(rotY) * 1.5,
-                0.2, // Look slightly up when moving
+                0.2,
                 Math.cos(rotY) * 1.5,
             );
             lookAtTarget.add(forwardOffset);
         }
 
-        // Smooth camera rotation
         const currentLookAt = cameraRef.current.target;
         currentLookAt.lerp(lookAtTarget, 0.05);
         camera.lookAt(currentLookAt);
 
-        // Add subtle camera shake when moving for more immersion
         if (isMoving) {
             const shakeIntensity = 0.02;
             camera.position.x += (Math.random() - 0.5) * shakeIntensity;
@@ -102,7 +89,7 @@ export default function GameCanvas({
     gbaPress,
     setGbaPress,
 }) {
-    const [currX, setCurrX] = useState(2.5); // spawn player at 2.5, 1.5
+    const [currX, setCurrX] = useState(2.5);
     const [currY, setCurrY] = useState(1.5);
     const [isMoving, setIsMoving] = useState(false);
     const [computerTint, setComputerTint] = useState(false);
@@ -177,11 +164,9 @@ export default function GameCanvas({
         }
     };
 
-    // Helper function to get the shortest rotation path
     const getShortestRotation = (currentRot, targetRot) => {
         let diff = targetRot - currentRot;
 
-        // Normalize the difference to [-π, π]
         while (diff > Math.PI) diff -= 2 * Math.PI;
         while (diff < -Math.PI) diff += 2 * Math.PI;
 
@@ -206,7 +191,7 @@ export default function GameCanvas({
         config: {
             tension: 120,
             friction: 25,
-            duration: undefined, // Remove fixed duration for smoother movement
+            duration: undefined,
         },
     });
 
@@ -229,16 +214,11 @@ export default function GameCanvas({
         setSkillsVisibility,
     ]);
 
-    // Get relative direction based on current facing direction
     const getRelativeDirection = (input, currentFacing) => {
         const directionMap = {
-            // When facing up (2)
             2: { front: 2, back: 1, left: 3, right: 4 },
-            // When facing down (1)
             1: { front: 1, back: 2, left: 4, right: 3 },
-            // When facing left (3)
             3: { front: 3, back: 4, left: 1, right: 2 },
-            // When facing right (4)
             4: { front: 4, back: 3, left: 2, right: 1 },
         };
 
@@ -250,8 +230,6 @@ export default function GameCanvas({
             if (isMoving) return;
 
             if (inputDirection === "front") {
-                // Only forward actually moves the player
-                // Convert input to actual direction based on current facing
                 const actualDirection = getRelativeDirection(
                     inputDirection,
                     currentDirection,
@@ -261,23 +239,22 @@ export default function GameCanvas({
                 let newY = currY;
 
                 switch (actualDirection) {
-                    case 1: // Down
+                    case 1:
                         newY = currY + 1;
                         break;
-                    case 2: // Up
+                    case 2:
                         newY = currY - 1;
                         break;
-                    case 3: // Left
+                    case 3:
                         newX = currX - 1;
                         break;
-                    case 4: // Right
+                    case 4:
                         newX = currX + 1;
                         break;
                     default:
                         break;
                 }
 
-                // Check boundaries
                 if (
                     newX < limits.x[0] ||
                     newX > limits.x[1] ||
@@ -289,7 +266,6 @@ export default function GameCanvas({
                     return;
                 }
 
-                // Check collisions
                 const isCollision = collisions.some(
                     ([x, y]) => x === newX && y === newY,
                 );
@@ -297,7 +273,6 @@ export default function GameCanvas({
                 if (!isCollision) {
                     setIsMoving(true);
 
-                    // Move to new position
                     setCurrX(newX);
                     setCurrY(newY);
 
@@ -312,7 +287,6 @@ export default function GameCanvas({
                     setResumeVisibility(false);
                     setSkillsVisibility(false);
 
-                    // Reset moving state after animation
                     setTimeout(() => {
                         setIsMoving(false);
                     }, 400);
@@ -323,21 +297,17 @@ export default function GameCanvas({
                     );
                 }
             } else {
-                // Handle rotation for left, right, and back - these only change orientation
                 const actualDirection = getRelativeDirection(
                     inputDirection,
                     currentDirection,
                 );
 
                 if (actualDirection !== currentDirection) {
-                    const currentOrientation =
-                        getOrientationFromDirection(currentDirection);
                     const newOrientation =
                         getOrientationFromDirection(actualDirection);
 
-                    // Calculate shortest rotation path
                     const shortestY = getShortestRotation(
-                        currentOrientation[1],
+                        rot.get()[1],
                         newOrientation[1],
                     );
 
@@ -359,6 +329,7 @@ export default function GameCanvas({
             setSkillsVisibility,
             collisionSoundPlay,
             checkInteractions,
+            rot,
         ],
     );
 
