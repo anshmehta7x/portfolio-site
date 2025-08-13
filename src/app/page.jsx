@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import isMobile from "is-mobile";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 const modals = {
     AchievementsModal: () => import("@/components/AchievementsModal"),
@@ -62,65 +63,83 @@ export default function Home() {
     }
 
     return (
-        <main className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden p-2 sm:p-4">
-            {isClientMobile ? (
-                <>
-                    <GameBoy
-                        setAchievementsVisibility={(b) =>
-                            b
-                                ? setActiveModal("AchievementsModal")
-                                : setActiveModal(null)
-                        }
-                        setResumeVisibility={(b) =>
-                            b
-                                ? setActiveModal("ResumeModal")
-                                : setActiveModal(null)
-                        }
-                        setSkillsVisibility={(b) =>
-                            b
-                                ? setActiveModal("SkillsModal")
-                                : setActiveModal(null)
-                        }
-                        setProjectsVisibility={(b) =>
-                            b
-                                ? setActiveModal("ProjectsModal")
-                                : setActiveModal(null)
-                        }
-                        setGbaPress={setGbaPress}
-                        gbaPress={gbaPress}
-                    />
-                    {renderFullScreenModal()}
-                </>
-            ) : (
-                <>
-                    <Handheld
-                        setAchievementsVisibility={(b) =>
-                            b
-                                ? setActiveModal("AchievementsModal")
-                                : setActiveModal(null)
-                        }
-                        setResumeVisibility={(b) =>
-                            b
-                                ? setActiveModal("ResumeModal")
-                                : setActiveModal(null)
-                        }
-                        setSkillsVisibility={(b) =>
-                            b
-                                ? setActiveModal("SkillsModal")
-                                : setActiveModal(null)
-                        }
-                        setProjectsVisibility={(b) =>
-                            b
-                                ? setActiveModal("ProjectsModal")
-                                : setActiveModal(null)
-                        }
-                        setGbaPress={setGbaPress}
-                        gbaPress={gbaPress}
-                        activeModal={activeModal}
-                        closeModal={closeModal}
-                    />
-                </>
-            )}
-        </main>
+        <>
+            <Head>
+                <link
+                    rel="preload"
+                    href="/demo-videos/scriptsync.mp4"
+                    as="video"
+                    type="video/mp4"
+                />
+                <link
+                    rel="preload"
+                    href="/demo-videos/yantrahack.mp4"
+                    as="video"
+                    type="video/mp4"
+                />
+
+                {/* <link rel="preload" href="/images/forreal-demo.jpg" as="image" />*/}
+            </Head>
+            <main className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden p-2 sm:p-4">
+                {isClientMobile ? (
+                    <>
+                        <GameBoy
+                            setAchievementsVisibility={(b) =>
+                                b
+                                    ? setActiveModal("AchievementsModal")
+                                    : setActiveModal(null)
+                            }
+                            setResumeVisibility={(b) =>
+                                b
+                                    ? setActiveModal("ResumeModal")
+                                    : setActiveModal(null)
+                            }
+                            setSkillsVisibility={(b) =>
+                                b
+                                    ? setActiveModal("SkillsModal")
+                                    : setActiveModal(null)
+                            }
+                            setProjectsVisibility={(b) =>
+                                b
+                                    ? setActiveModal("ProjectsModal")
+                                    : setActiveModal(null)
+                            }
+                            setGbaPress={setGbaPress}
+                            gbaPress={gbaPress}
+                        />
+                        {renderFullScreenModal()}
+                    </>
+                ) : (
+                    <>
+                        <Handheld
+                            setAchievementsVisibility={(b) =>
+                                b
+                                    ? setActiveModal("AchievementsModal")
+                                    : setActiveModal(null)
+                            }
+                            setResumeVisibility={(b) =>
+                                b
+                                    ? setActiveModal("ResumeModal")
+                                    : setActiveModal(null)
+                            }
+                            setSkillsVisibility={(b) =>
+                                b
+                                    ? setActiveModal("SkillsModal")
+                                    : setActiveModal(null)
+                            }
+                            setProjectsVisibility={(b) =>
+                                b
+                                    ? setActiveModal("ProjectsModal")
+                                    : setActiveModal(null)
+                            }
+                            setGbaPress={setGbaPress}
+                            gbaPress={gbaPress}
+                            activeModal={activeModal}
+                            closeModal={closeModal}
+                        />
+                    </>
+                )}
+            </main>
+        </>
     );
 }
