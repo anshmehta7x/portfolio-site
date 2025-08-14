@@ -27,6 +27,22 @@ const projectsData = [
         mediaType: "video",
     },
     {
+        title: "LocalBlockchain",
+        description:
+            "A blockchain implementation featuring Proof-of-Work mining, cryptographic hashing, and Merkle Trees. Includes a C++ backend for transaction processing/mining and an Electron.js/React.js interface for visualization.",
+        media: "/demo-videos/simpleblockchain.mp4",
+        mediaType: "video",
+        githubUrl: "https://github.com/anshmehta7x/LocalBlockchain",
+        techStack: [
+            "C++17",
+            "Proof-Of-Work",
+            "OpenSSL",
+            "Electron.js",
+            "React.js",
+            "TailwindCSS",
+        ],
+    },
+    {
         title: "ForReal AI - 2nd Place @ Code4Change",
         description:
             "An AI-powered deepfake detector for both audio and image inputs.",
