@@ -10,6 +10,7 @@ const modals = {
     ResumeModal: () => import("@/components/ResumeModal"),
     SkillsModal: () => import("@/components/SkillsModal"),
     ProjectsModal: () => import("@/components/ProjectsModal"),
+    ContactModal: () => import("@/components/ContactModal"),
 };
 
 const GameBoy = dynamic(() => import("@/components/GameBoy"), {
@@ -104,6 +105,11 @@ export default function Home() {
                                     ? setActiveModal("ProjectsModal")
                                     : setActiveModal(null)
                             }
+                            setContactVisibility={(b) =>
+                                b
+                                    ? setActiveModal("ContactModal")
+                                    : setActiveModal(null)
+                            }
                             setGbaPress={setGbaPress}
                             gbaPress={gbaPress}
                         />
@@ -130,6 +136,11 @@ export default function Home() {
                             setProjectsVisibility={(b) =>
                                 b
                                     ? setActiveModal("ProjectsModal")
+                                    : setActiveModal(null)
+                            }
+                            setContactVisibility={(b) =>
+                                b
+                                    ? setActiveModal("ContactModal")
                                     : setActiveModal(null)
                             }
                             setGbaPress={setGbaPress}

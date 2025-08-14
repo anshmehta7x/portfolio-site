@@ -89,6 +89,7 @@ export default function GameCanvas({
     gbaPress,
     setGbaPress,
     setProjectsVisibility,
+    setContactVisibility,
 }) {
     const [currX, setCurrX] = useState(2.5);
     const [currY, setCurrY] = useState(1.5);
@@ -180,7 +181,6 @@ export default function GameCanvas({
                 (position) => position[0] === x && position[1] === y,
             ),
         );
-        console.log(interaction);
         return interaction ? interaction.type : null;
     };
 
@@ -198,7 +198,6 @@ export default function GameCanvas({
 
     const handleInteract = useCallback(() => {
         if (interactionType) {
-            console.log(`Interacting with ${interactionType}`);
             if (interactionType === "certificate") {
                 setAchievementsVisibility((prevVisibility) => !prevVisibility);
             } else if (interactionType === "computer") {
@@ -266,7 +265,6 @@ export default function GameCanvas({
                     newY > limits.y[1]
                 ) {
                     collisionSoundPlay();
-                    console.log("Cannot move outside the limits.");
                     return;
                 }
 
@@ -296,9 +294,6 @@ export default function GameCanvas({
                     }, 400);
                 } else {
                     collisionSoundPlay();
-                    console.log(
-                        "Cannot move to that position due to collision.",
-                    );
                 }
             } else {
                 const actualDirection = getRelativeDirection(
@@ -340,7 +335,6 @@ export default function GameCanvas({
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (isMoving) return;
-            console.log(event.key);
             switch (event.key) {
                 case "ArrowUp":
                 case "w":
@@ -389,9 +383,10 @@ export default function GameCanvas({
                 handleMove("right");
                 break;
             case "a":
-            case "start":
                 handleInteract();
                 break;
+            case "start":
+                setContactVisibility((prevVisibility) => !prevVisibility);
             default:
                 break;
         }
@@ -399,7 +394,6 @@ export default function GameCanvas({
     }, [gbaPress, handleMove, handleInteract, setGbaPress, isMoving]);
 
     function handleClickInteraction(type) {
-        console.log("Clicked on interaction:", type);
         if (type === "certificate") {
             setAchievementsVisibility((prevVisibility) => !prevVisibility);
         } else if (type === "computer") {

@@ -8,12 +8,15 @@ const AchievementsModal = React.lazy(
 );
 const ResumeModal = React.lazy(() => import("@/components/ResumeModal"));
 const ProjectsModal = React.lazy(() => import("@/components/ProjectsModal"));
+const ContactModal = React.lazy(() => import("@/components/ContactModal"));
+
 const SkillsModal = React.lazy(() => import("@/components/SkillsModal"));
 
 const modals = {
     AchievementsModal,
     ResumeModal,
     SkillsModal,
+    ContactModal,
     ProjectsModal,
 };
 
@@ -26,6 +29,7 @@ export default function HandheldConsole({
     activeModal,
     closeModal,
     setProjectsVisibility,
+    setContactVisibility,
 }) {
     const [pressedButton, setPressedButton] = useState(null);
     const [lastTouchTime, setLastTouchTime] = useState(0);
@@ -202,6 +206,7 @@ export default function HandheldConsole({
                                 setResumeVisibility={setResumeVisibility}
                                 setSkillsVisibility={setSkillsVisibility}
                                 setProjectsVisibility={setProjectsVisibility}
+                                setContactVisibility={setContactVisibility}
                                 gbaPress={gbaPress}
                                 setGbaPress={setGbaPress}
                             />
@@ -242,7 +247,7 @@ export default function HandheldConsole({
                             ></div>
                         </div>
                         <div className="text-violet-300 text-sm font-bold tracking-wider">
-                            START
+                            CONTACT
                         </div>
                     </div>
 

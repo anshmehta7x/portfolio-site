@@ -74,7 +74,6 @@ export function RoomModel(props) {
             <group
                 name="computer"
                 onClick={() => {
-                    console.log("computer clicked!");
                     props.onInteraction("computer");
                 }}
                 onPointerOver={() => setHovered("computer")}
@@ -100,7 +99,6 @@ export function RoomModel(props) {
             <group
                 name="television"
                 onClick={() => {
-                    console.log("television clicked!");
                     props.onInteraction("television");
                 }}
                 onPointerOver={() => setHovered("television")}
@@ -144,7 +142,6 @@ export function RoomModel(props) {
             <group
                 name="bookshelf"
                 onClick={() => {
-                    console.log("bookshelf clicked!");
                     props.onInteraction("bookshelf");
                 }}
                 onPointerOver={() => setHovered("bookshelf")}
@@ -182,7 +179,6 @@ export function RoomModel(props) {
             <group
                 name="certificate"
                 onClick={() => {
-                    console.log("certificate clicked!");
                     props.onInteraction("certificate");
                 }}
                 onPointerOver={() => setHovered("certificate")}

@@ -8,6 +8,7 @@ export default function GameBoy({
     setSkillsVisibility,
     setGbaPress,
     setProjectsVisibility,
+    setContactVisibility,
     gbaPress,
 }) {
     const [pressedButton, setPressedButton] = useState(null);
@@ -72,6 +73,7 @@ export default function GameBoy({
                             setResumeVisibility={setResumeVisibility}
                             setSkillsVisibility={setSkillsVisibility}
                             setProjectsVisibility={setProjectsVisibility}
+                            setContactVisibility={setContactVisibility}
                             gbaPress={gbaPress}
                             setGbaPress={setGbaPress}
                         />
@@ -298,7 +300,7 @@ export default function GameBoy({
                                 } w-[90%] h-[70%] rounded-full transition-all duration-75`}
                             ></div>
                         </div>
-                        <div className="text-violet-700 text-sm">START</div>
+                        <div className="text-violet-700 text-sm">CONTACT</div>
                     </div>
                 </div>
             </div>
