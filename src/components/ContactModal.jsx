@@ -88,7 +88,7 @@ export default function ContactModal({
                     {/* Greeting */}
                     <div className="text-center">
                         <p className="text-slate-200 font-bigpixel text-xl mb-2">
-                            Let's connect!
+                            Let&apos;s connect!
                         </p>
                         <p className="text-slate-400 font-bigpixel text-sm">
                             Feel free to reach out through any of these channels
