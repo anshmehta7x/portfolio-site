@@ -12,181 +12,207 @@ import React, { useRef, useState, useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
 
 export function RoomModel(props) {
-  const { nodes, materials } = useGLTF("/scene.gltf");
-  const { interactions, interactionType } = props;
-  const interactionMaterial = useMemo(() => {
-    if (interactionType) {
-      const tintedMaterial = materials.fireRed_material.clone();
-      switch (interactionType) {
-        case "computer":
-          tintedMaterial.color.setHSL(0.33, 1, 0.5); // Greenish tint
-          break;
-        case "bookshelf":
-          tintedMaterial.color.setHSL(0.2, 1, 0.5); // Reddish tint
-          break;
-        case "television":
-          tintedMaterial.color.setHSL(0.6, 1, 0.5); // Blueish tint
-          break;
-        case "certificate":
-          tintedMaterial.color.setHSL(0.2, 1, 0.5); // Yellowish tint
-          break;
-        default:
-          break;
-      }
-      return tintedMaterial;
-    } else {
-      return materials.fireRed_material;
-    }
-  }, [interactionType, materials.fireRed_material]);
+    const { nodes, materials } = useGLTF("/scene.gltf");
+    const { interactions, interactionType } = props;
+    const [hovered, setHovered] = useState(null);
 
-  return (
-    <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.base_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.tiles_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.chair_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.table_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <group
-        name="computer"
-        onClick={() => {
-          console.log("computer clicked!");
-          props.onInteraction("computer");
-        }}
-      >
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Computer_fireRed_material_0.geometry}
-          material={
-            interactionType === "computer"
-              ? interactionMaterial
-              : materials.fireRed_material
-          }
-        />
-      </group>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.TV_stand_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <group name="television">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.TV_fireRed_material_0.geometry}
-          material={
-            interactionType === "television"
-              ? interactionMaterial
-              : materials.fireRed_material
-          }
-        />
-      </group>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.carpet_A_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.carpet_B_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.bed_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.dresser_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <group name="bookshelf">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.bookShelf_fireRed_material_0.geometry}
-          material={
-            interactionType === "bookshelf"
-              ? interactionMaterial
-              : materials.fireRed_material
-          }
-        />
-      </group>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.NES_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.railing_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.stairs_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <group
-        name="certificate"
-        onClick={() => {
-          console.log("certificate clicked!");
-          props.onInteraction("certificate");
-        }}
-      >
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_picture_fireRed_material_0.geometry}
-          material={
-            interactionType === "certificate"
-              ? interactionMaterial
-              : materials.fireRed_material
-          }
-        />
-      </group>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.ambient_occlusion_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.title_fireRed_material_0.geometry}
-        material={materials.fireRed_material}
-      />
-    </group>
-  );
+    // Returns the correct tinted material for a given interaction type
+    const getInteractionMaterial = (type) => {
+        if (type) {
+            const tintedMaterial = materials.fireRed_material.clone();
+            switch (type) {
+                case "computer":
+                    tintedMaterial.color.setHSL(0.33, 1, 0.5); // Greenish tint
+                    break;
+                case "bookshelf":
+                    tintedMaterial.color.setHSL(0.2, 1, 0.5); // Reddish tint
+                    break;
+                case "television":
+                    tintedMaterial.color.setHSL(0.6, 1, 0.5); // Blueish tint
+                    break;
+                case "certificate":
+                    tintedMaterial.color.setHSL(0.2, 1, 0.5); // Yellowish tint
+                    break;
+                default:
+                    break;
+            }
+            return tintedMaterial;
+        } else {
+            return materials.fireRed_material;
+        }
+    };
+
+    // Determine which group should be tinted (hover takes precedence over click)
+    const activeType = hovered || interactionType;
+
+    return (
+        <group {...props} dispose={null}>
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.base_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.tiles_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.chair_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.table_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <group
+                name="computer"
+                onClick={() => {
+                    console.log("computer clicked!");
+                    props.onInteraction("computer");
+                }}
+                onPointerOver={() => setHovered("computer")}
+                onPointerOut={() => setHovered(null)}
+            >
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Computer_fireRed_material_0.geometry}
+                    material={
+                        activeType === "computer"
+                            ? getInteractionMaterial("computer")
+                            : materials.fireRed_material
+                    }
+                />
+            </group>
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.TV_stand_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <group
+                name="television"
+                onClick={() => {
+                    console.log("television clicked!");
+                    props.onInteraction("television");
+                }}
+                onPointerOver={() => setHovered("television")}
+                onPointerOut={() => setHovered(null)}
+            >
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.TV_fireRed_material_0.geometry}
+                    material={
+                        activeType === "television"
+                            ? getInteractionMaterial("television")
+                            : materials.fireRed_material
+                    }
+                />
+            </group>
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.carpet_A_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.carpet_B_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.bed_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.dresser_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <group
+                name="bookshelf"
+                onClick={() => {
+                    console.log("bookshelf clicked!");
+                    props.onInteraction("bookshelf");
+                }}
+                onPointerOver={() => setHovered("bookshelf")}
+                onPointerOut={() => setHovered(null)}
+            >
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.bookShelf_fireRed_material_0.geometry}
+                    material={
+                        activeType === "bookshelf"
+                            ? getInteractionMaterial("bookshelf")
+                            : materials.fireRed_material
+                    }
+                />
+            </group>
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.NES_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.railing_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.stairs_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <group
+                name="certificate"
+                onClick={() => {
+                    console.log("certificate clicked!");
+                    props.onInteraction("certificate");
+                }}
+                onPointerOver={() => setHovered("certificate")}
+                onPointerOut={() => setHovered(null)}
+            >
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.wall_picture_fireRed_material_0.geometry}
+                    material={
+                        activeType === "certificate"
+                            ? getInteractionMaterial("certificate")
+                            : materials.fireRed_material
+                    }
+                />
+            </group>
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.ambient_occlusion_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.title_fireRed_material_0.geometry}
+                material={materials.fireRed_material}
+            />
+        </group>
+    );
 }
 
 useGLTF.preload("/scene.gltf");
