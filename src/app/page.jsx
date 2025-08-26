@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import isMobile from "is-mobile";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import WelcomePopup from "@/components/WelcomePopup";
 
 const modals = {
     AchievementsModal: () => import("@/components/AchievementsModal"),
@@ -11,6 +12,7 @@ const modals = {
     SkillsModal: () => import("@/components/SkillsModal"),
     ProjectsModal: () => import("@/components/ProjectsModal"),
     ContactModal: () => import("@/components/ContactModal"),
+    HelpModal: () => import("@/components/HelpModal"),
 };
 
 const GameBoy = dynamic(() => import("@/components/GameBoy"), {
@@ -28,10 +30,20 @@ export default function Home() {
     const [isClientMobile, setIsClientMobile] = useState(false);
     const [hasMounted, setHasMounted] = useState(false);
     const [gbaPress, setGbaPress] = useState("");
+    const [isWelcomePopupOpen, setIsWelcomePopupOpen] = useState(false);
 
     useEffect(() => {
         setIsClientMobile(isMobile());
         setHasMounted(true);
+
+        const lastVisited = localStorage.getItem("lastVisited");
+        const currentTime = new Date().getTime();
+        const oneDay = 24 * 60 * 60 * 1000;
+
+        if (!lastVisited || currentTime - Number(lastVisited) > oneDay) {
+            setIsWelcomePopupOpen(true);
+            localStorage.setItem("lastVisited", String(currentTime));
+        }
     }, []);
 
     const closeModal = () => setActiveModal(null);
@@ -39,7 +51,13 @@ export default function Home() {
     useEffect(() => {
         if (gbaPress === "b" && activeModal) {
             closeModal();
-            setGbaPress(""); // Reset the button press
+            setGbaPress("");
+        }
+
+        // Updated to open HelpModal instead of WelcomePopup
+        if (gbaPress === "help") {
+            setActiveModal("HelpModal");
+            setGbaPress("");
         }
     }, [gbaPress, activeModal]);
 
@@ -78,10 +96,12 @@ export default function Home() {
                     as="video"
                     type="video/mp4"
                 />
-
-                {/* <link rel="preload" href="/images/forreal-demo.jpg" as="image" />*/}
             </Head>
             <main className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden p-2 sm:p-4">
+                <WelcomePopup
+                    isOpen={isWelcomePopupOpen}
+                    onClose={() => setIsWelcomePopupOpen(false)}
+                />
                 {isClientMobile ? (
                     <>
                         <GameBoy

@@ -25,6 +25,7 @@ const bigpixel = localFont({
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
+            <link rel="icon" href="favicon.ico" sizes="any" />{" "}
             <Script
                 strategy="afterInteractive"
                 src="https://www.googletagmanager.com/gtag/js?id=G-YZ67R6ZQY1"

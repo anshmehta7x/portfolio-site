@@ -46,18 +46,18 @@ const projectsData = [
         title: "ForReal AI - 2nd Place @ Code4Change",
         description:
             "An AI-powered deepfake detector for both audio and image inputs.",
-        media: "/images/forreal-demo.jpg",
+        media: "/demo-images/forreal.png",
         mediaType: "image",
-        liveUrl: "https://devfolio.co/projects/forreal-4f73",
-        githubUrl: "https://github.com/anshmehta7x/ForReal",
-        techStack: ["Python", "PyTorch", "FastAPI", "React.js", "AI/ML"],
+        githubUrl:
+            "https://www.kaggle.com/code/anshmehta7x/forreal-ai-deepfaked-audio-detection",
+        techStack: ["Python", "TensorFlow", "FastAPI", "React.js", "AI/ML"],
     },
     {
         title: "StoryScape - 3rd Place @ DevJams",
         description:
             "A Generative AI tool that converts stories into rich, audio-visual scenes.",
-        media: "/videos/storyscape-demo.mp4",
-        mediaType: "video",
+        media: "/demo-images/storyscape.png",
+        mediaType: "image",
         liveUrl: "https://devfolio.co/projects/storyscape-34dd",
         githubUrl: "https://github.com/anshmehta7x/StoryScape",
         techStack: ["Hugging Face", "ElevenLabs API", "Next.js", "GenAI"],

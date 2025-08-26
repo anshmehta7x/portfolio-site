@@ -11,6 +11,7 @@ const ProjectsModal = React.lazy(() => import("@/components/ProjectsModal"));
 const ContactModal = React.lazy(() => import("@/components/ContactModal"));
 
 const SkillsModal = React.lazy(() => import("@/components/SkillsModal"));
+const HelpModal = React.lazy(() => import("@/components/HelpModal"));
 
 const modals = {
     AchievementsModal,
@@ -18,6 +19,7 @@ const modals = {
     SkillsModal,
     ContactModal,
     ProjectsModal,
+    HelpModal,
 };
 
 export default function HandheldConsole({
