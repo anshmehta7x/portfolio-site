@@ -21,7 +21,7 @@ const controls = [
             { key: "D-Pad", action: "Move / Turn" },
             { key: "A Button", action: "Interact" },
             { key: "Click Object", action: "Interact" },
-            { key: "B Button", action: "Close Modals" },
+            { key: "B Button", action: "Close modals" },
         ],
     },
 ];

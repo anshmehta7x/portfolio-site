@@ -4,14 +4,14 @@ import React, { useState, Suspense } from "react";
 import GameCanvas from "@/components/GameCanvas";
 
 const AchievementsModal = React.lazy(
-    () => import("@/components/AchievementsModal"),
+    () => import("@/components/modals/AchievementsModal"),
 );
-const ResumeModal = React.lazy(() => import("@/components/ResumeModal"));
-const ProjectsModal = React.lazy(() => import("@/components/ProjectsModal"));
-const ContactModal = React.lazy(() => import("@/components/ContactModal"));
+const ResumeModal = React.lazy(() => import("@/components/modals/ResumeModal"));
+const ProjectsModal = React.lazy(() => import("@/components/modals/ProjectsModal"));
+const ContactModal = React.lazy(() => import("@/components/modals/ContactModal"));
 
-const SkillsModal = React.lazy(() => import("@/components/SkillsModal"));
-const HelpModal = React.lazy(() => import("@/components/HelpModal"));
+const SkillsModal = React.lazy(() => import("@/components/modals/SkillsModal"));
+const HelpModal = React.lazy(() => import("@/components/modals/HelpModal"));
 
 const modals = {
     AchievementsModal,

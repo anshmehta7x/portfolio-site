@@ -7,12 +7,12 @@ import Head from "next/head";
 import WelcomePopup from "@/components/WelcomePopup";
 
 const modals = {
-    AchievementsModal: () => import("@/components/AchievementsModal"),
-    ResumeModal: () => import("@/components/ResumeModal"),
-    SkillsModal: () => import("@/components/SkillsModal"),
-    ProjectsModal: () => import("@/components/ProjectsModal"),
-    ContactModal: () => import("@/components/ContactModal"),
-    HelpModal: () => import("@/components/HelpModal"),
+    AchievementsModal: () => import("@/components/modals/AchievementsModal"),
+    ResumeModal: () => import("@/components/modals/ResumeModal"),
+    SkillsModal: () => import("@/components/modals/SkillsModal"),
+    ProjectsModal: () => import("@/components/modals/ProjectsModal"),
+    ContactModal: () => import("@/components/modals/ContactModal"),
+    HelpModal: () => import("@/components/modals/HelpModal"),
 };
 
 const GameBoy = dynamic(() => import("@/components/GameBoy"), {
