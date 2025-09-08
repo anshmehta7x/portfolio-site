@@ -1,12 +1,12 @@
-import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { RoomModel } from "@/assets/RoomModel";
-import { PlayerModel } from "@/assets/PlayerModel";
-import { Suspense, useEffect, useState, useCallback } from "react";
-import { useSpring, animated } from "@react-spring/three";
+import {OrbitControls} from "@react-three/drei";
+import {Canvas} from "@react-three/fiber";
+import {RoomModel} from "@/assets/RoomModel";
+import {PlayerModel} from "@/assets/PlayerModel";
+import {Suspense, useCallback, useEffect, useState} from "react";
+import {animated, useSpring} from "@react-spring/three";
 import useSound from "use-sound";
-import {FollowCamera, getShortestRotation, getRelativeDirection, getOrientationFromDirection} from "@/lib/cameraUtils";
-import {collisions, limits, interactions, cameraSpawn, playerSpawn, defaultOrientation} from "@/lib/constants";
+import {FollowCamera, getOrientationFromDirection, getRelativeDirection, getShortestRotation} from "@/lib/cameraUtils";
+import {cameraSpawn, collisions, defaultOrientation, interactions, limits, playerSpawn} from "@/lib/constants";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
@@ -22,7 +22,6 @@ export default function GameCanvas({
     const [currX, setCurrX] = useState(playerSpawn[0]);
     const [currY, setCurrY] = useState(playerSpawn[1]);
     const [isMoving, setIsMoving] = useState(false);
-    const [computerTint, setComputerTint] = useState(false);
     const [interactionType, setInteractionType] = useState(null);
     const [currentDirection, setCurrentDirection] = useState(2);
     const [orientation, setOrientation] = useState(defaultOrientation);
