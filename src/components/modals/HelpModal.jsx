@@ -153,7 +153,7 @@ export default function HelpModal({
                     font-weight: bold;
                 }
                 .font-pixeboy {
-                    font-family: var(--pixeboy);
+                    font-family: var(--pixeboy),monospace;
                 }
                 .scrollbar-hide {
                     -ms-overflow-style: none;

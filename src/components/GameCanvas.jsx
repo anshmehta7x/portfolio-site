@@ -28,15 +28,14 @@ export default function GameCanvas({
 
     const [collisionSoundPlay] = useSound(collisionsound);
 
-    const checkInteractions = (x, y) => {
+    const checkInteractions = useCallback((x, y) => {
         const interaction = interactions.find((interaction) =>
             interaction.positions.some(
                 (position) => position[0] === x && position[1] === y,
             ),
         );
         return interaction ? interaction.type : null;
-    };
-
+    }, []);
 
     const { pos, rot } = useSpring({
         pos: [currX, 0, currY],
@@ -162,9 +161,6 @@ export default function GameCanvas({
             currY,
             currentDirection,
             isMoving,
-            limits.x,
-            limits.y,
-            collisions,
             setAchievementsVisibility,
             setResumeVisibility,
             setSkillsVisibility,
@@ -233,7 +229,7 @@ export default function GameCanvas({
                 break;
         }
         setGbaPress("");
-    }, [gbaPress, handleMove, handleInteract, setGbaPress, isMoving]);
+    }, [gbaPress, handleMove, handleInteract, setGbaPress, isMoving, setContactVisibility]);
 
     function handleClickInteraction(type) {
         if (type === "certificate") {

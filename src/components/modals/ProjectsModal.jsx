@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
 
 // Updated project data to include the 'techStack' array for each project.
 // Tech stack for ScriptSync is from the resume. Others are based on their descriptions.
@@ -194,9 +195,10 @@ export default function ProjectsModal({
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <img
+                                <Image
                                     src={currentProject.media}
                                     alt={`${currentProject.title} screenshot`}
+                                    fill={true}
                                     className="w-full h-full object-cover"
                                 />
                             )}
