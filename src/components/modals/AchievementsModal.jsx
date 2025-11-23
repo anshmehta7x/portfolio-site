@@ -13,6 +13,20 @@ import {
 } from "lucide-react";
 
 const achievements = [
+        {
+        id: "amazon",
+        title: "Software Development Engineer Intern - Amazon",
+        category: "Professional",
+        icon: Briefcase,
+        color: "from-orange-500 to-yellow-600",
+        bgGradient: "from-orange-50 to-yellow-50",
+        description: `Software Development Engineer Intern (Jan 2026 - June 2026)\nIncoming SDE Intern at Amazon.`,
+        highlights: [
+            "Incoming SDE Intern",
+            "Amazon",
+            "Software Development"
+        ],
+    },
     {
         id: "education",
         title: "Education - Vellore Institute of Technology",
