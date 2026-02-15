@@ -1,28 +1,10 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import LeftControls from "@/components/HandheldParts/LeftControls";
 import ScreenArea from "@/components/HandheldParts/ScreenArea";
 import RightControls from "@/components/HandheldParts/RightControls";
-
-const AchievementsModal = React.lazy(
-    () => import("@/components/modals/AchievementsModal"),
-);
-const ResumeModal = React.lazy(() => import("@/components/modals/ResumeModal"));
-const ProjectsModal = React.lazy(() => import("@/components/modals/ProjectsModal"));
-const ContactModal = React.lazy(() => import("@/components/modals/ContactModal"));
-
-const SkillsModal = React.lazy(() => import("@/components/modals/SkillsModal"));
-const HelpModal = React.lazy(() => import("@/components/modals/HelpModal"));
-
-const modals = {
-    AchievementsModal,
-    ResumeModal,
-    SkillsModal,
-    ContactModal,
-    ProjectsModal,
-    HelpModal,
-};
+import { MODAL_COMPONENTS } from "@/lib/modalRegistry";
 
 export default function HandheldConsole({
     setAchievementsVisibility,
@@ -82,7 +64,11 @@ export default function HandheldConsole({
 
     const renderConstrainedModal = () => {
         if (!activeModal) return null;
-        const ModalComponent = modals[activeModal];
+        
+        const ModalLoader = MODAL_COMPONENTS[activeModal];
+        if (!ModalLoader) return null;
+
+        const ModalComponent = lazy(ModalLoader);
 
         return (
             <Suspense

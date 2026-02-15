@@ -1,5 +1,5 @@
-import {useRef} from "react";
-import {useFrame, useThree} from "@react-three/fiber";
+import { useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 function FollowCamera({ playerPosition, playerRotation, isMoving }) {
@@ -22,7 +22,7 @@ function FollowCamera({ playerPosition, playerRotation, isMoving }) {
             playerPosition[2],
         );
 
-        const [_, rotY] = playerRotation;
+        const [, rotY] = playerRotation;
 
         const baseDistance = 4.5;
         const baseHeight = 3.8;
@@ -75,7 +75,7 @@ function FollowCamera({ playerPosition, playerRotation, isMoving }) {
     return null;
 }
 
-function getShortestRotation (currentRot, targetRot) {
+function getShortestRotation(currentRot, targetRot) {
     let diff = targetRot - currentRot;
 
     while (diff > Math.PI) diff -= 2 * Math.PI;
@@ -84,8 +84,7 @@ function getShortestRotation (currentRot, targetRot) {
     return currentRot + diff;
 }
 
-
-function getRelativeDirection(input, currentFacing){
+function getRelativeDirection(input, currentFacing) {
     const directionMap = {
         2: { front: 2, back: 1, left: 3, right: 4 },
         1: { front: 1, back: 2, left: 4, right: 3 },
@@ -96,7 +95,7 @@ function getRelativeDirection(input, currentFacing){
     return directionMap[currentFacing][input];
 }
 
-function getOrientationFromDirection(direction){
+function getOrientationFromDirection(direction) {
     switch (direction) {
         case 1: // Down
             return [0, 0, 0];
@@ -111,4 +110,4 @@ function getOrientationFromDirection(direction){
     }
 }
 
-export {FollowCamera, getShortestRotation, getRelativeDirection, getOrientationFromDirection};
+export { FollowCamera, getShortestRotation, getRelativeDirection, getOrientationFromDirection };

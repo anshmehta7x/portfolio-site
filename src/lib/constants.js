@@ -52,8 +52,17 @@ const limits = {
 
 const cameraSpawn = { position: [5, 5, 8], fov: 60 }
 
-const playerSpawn = [2.5,1.5] // x,y value to spawn player
+const playerSpawn = [2.5,1.5]
 
 const defaultOrientation = [0, Math.PI, 0]
 
-export {collisions, interactions, limits, cameraSpawn, playerSpawn, defaultOrientation}
+const MODAL_NAMES = {
+    ACHIEVEMENTS: "AchievementsModal",
+    RESUME: "ResumeModal",
+    SKILLS: "SkillsModal",
+    PROJECTS: "ProjectsModal",
+    CONTACT: "ContactModal",
+    HELP: "HelpModal",
+};
+
+export { collisions, interactions, limits, cameraSpawn, playerSpawn, defaultOrientation, MODAL_NAMES };

@@ -1,19 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import isMobile from "is-mobile";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import WelcomePopup from "@/components/WelcomePopup";
-
-const modals = {
-    AchievementsModal: () => import("@/components/modals/AchievementsModal"),
-    ResumeModal: () => import("@/components/modals/ResumeModal"),
-    SkillsModal: () => import("@/components/modals/SkillsModal"),
-    ProjectsModal: () => import("@/components/modals/ProjectsModal"),
-    ContactModal: () => import("@/components/modals/ContactModal"),
-    HelpModal: () => import("@/components/modals/HelpModal"),
-};
+import { MODAL_COMPONENTS, INTERACTION_MODAL_MAP } from "@/lib/modalRegistry";
 
 const GameBoy = dynamic(() => import("@/components/GameBoy"), {
     ssr: false,
@@ -48,13 +40,14 @@ export default function Home() {
 
     const closeModal = () => setActiveModal(null);
 
+    // Handle B button to close modal
     useEffect(() => {
         if (gbaPress === "b" && activeModal) {
             closeModal();
             setGbaPress("");
         }
 
-        // Updated to open HelpModal instead of WelcomePopup
+        // Handle help button
         if (gbaPress === "help") {
             setActiveModal("HelpModal");
             setGbaPress("");
@@ -63,14 +56,36 @@ export default function Home() {
 
     const renderFullScreenModal = () => {
         if (!activeModal) return null;
-        const ModalComponent = modals[activeModal];
-        const LazyModal = React.lazy(ModalComponent);
+        
+        const ModalLoader = MODAL_COMPONENTS[activeModal];
+        if (!ModalLoader) return null;
+
+        const LazyModal = lazy(ModalLoader);
 
         return (
-            <React.Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <LazyModal visibility={!!activeModal} onClose={closeModal} />
-            </React.Suspense>
+            </Suspense>
         );
+    };
+
+    // Map interaction types to modals
+    const handleInteraction = (interactionType) => {
+        const modalName = INTERACTION_MODAL_MAP[interactionType];
+        if (modalName) {
+            setActiveModal(modalName);
+        }
+    };
+
+    // Props for console components
+    const consoleProps = {
+        setAchievementsVisibility: (b) => setActiveModal(b ? "AchievementsModal" : null),
+        setResumeVisibility: (b) => setActiveModal(b ? "ResumeModal" : null),
+        setSkillsVisibility: (b) => setActiveModal(b ? "SkillsModal" : null),
+        setProjectsVisibility: (b) => setActiveModal(b ? "ProjectsModal" : null),
+        setContactVisibility: (b) => setActiveModal(b ? "ContactModal" : null),
+        setGbaPress,
+        gbaPress,
     };
 
     if (!hasMounted) {
@@ -104,67 +119,13 @@ export default function Home() {
                 />
                 {isClientMobile ? (
                     <>
-                        <GameBoy
-                            setAchievementsVisibility={(b) =>
-                                b
-                                    ? setActiveModal("AchievementsModal")
-                                    : setActiveModal(null)
-                            }
-                            setResumeVisibility={(b) =>
-                                b
-                                    ? setActiveModal("ResumeModal")
-                                    : setActiveModal(null)
-                            }
-                            setSkillsVisibility={(b) =>
-                                b
-                                    ? setActiveModal("SkillsModal")
-                                    : setActiveModal(null)
-                            }
-                            setProjectsVisibility={(b) =>
-                                b
-                                    ? setActiveModal("ProjectsModal")
-                                    : setActiveModal(null)
-                            }
-                            setContactVisibility={(b) =>
-                                b
-                                    ? setActiveModal("ContactModal")
-                                    : setActiveModal(null)
-                            }
-                            setGbaPress={setGbaPress}
-                            gbaPress={gbaPress}
-                        />
+                        <GameBoy {...consoleProps} />
                         {renderFullScreenModal()}
                     </>
                 ) : (
                     <>
                         <Handheld
-                            setAchievementsVisibility={(b) =>
-                                b
-                                    ? setActiveModal("AchievementsModal")
-                                    : setActiveModal(null)
-                            }
-                            setResumeVisibility={(b) =>
-                                b
-                                    ? setActiveModal("ResumeModal")
-                                    : setActiveModal(null)
-                            }
-                            setSkillsVisibility={(b) =>
-                                b
-                                    ? setActiveModal("SkillsModal")
-                                    : setActiveModal(null)
-                            }
-                            setProjectsVisibility={(b) =>
-                                b
-                                    ? setActiveModal("ProjectsModal")
-                                    : setActiveModal(null)
-                            }
-                            setContactVisibility={(b) =>
-                                b
-                                    ? setActiveModal("ContactModal")
-                                    : setActiveModal(null)
-                            }
-                            setGbaPress={setGbaPress}
-                            gbaPress={gbaPress}
+                            {...consoleProps}
                             activeModal={activeModal}
                             closeModal={closeModal}
                         />
