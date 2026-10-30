@@ -18,15 +18,18 @@ const collisions = [
 ];
 
 // positions: tiles Red stands on to check the object; facing: which way he
-// turns to look at it when he arrives there by click/tap.
+// turns to look at it when he arrives there by click/tap; marker: where the
+// bouncing "!" hint floats (world x, y, z).
 const interactions = [
     {
         type: "computer",
+        marker: [-4.4, 2.0, -2.6],
         positions: [[-4.5, -1.5]],
         facing: "up",
     },
     {
         type: "bookshelf",
+        marker: [-1.0, 2.25, -2.6],
         positions: [
             [-0.5, -1.5],
             [-1.5, -1.5],
@@ -35,6 +38,7 @@ const interactions = [
     },
     {
         type: "television",
+        marker: [0.5, 1.9, -0.5],
         positions: [
             [0.5, 1.5],
             [0.5, 0.5],
@@ -43,6 +47,7 @@ const interactions = [
     },
     {
         type: "certificate",
+        marker: [4.9, 2.0, -3.2],
         positions: [
             [5.5, -1.5],
             [5.5, -2.5],

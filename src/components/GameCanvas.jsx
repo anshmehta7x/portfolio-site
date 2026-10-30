@@ -14,6 +14,11 @@ import {DIRECTIONS, INPUT_PRIORITY} from "@/lib/input";
 import {INTERACTION_SCREENS} from "@/components/screens/ScreenHost";
 import GridDebug from "@/components/GridDebug";
 import FloorPicker from "@/components/FloorPicker";
+import InteractionMarkers from "@/components/hints/InteractionMarkers";
+import ControlsLegend from "@/components/hints/ControlsLegend";
+import TextBox from "@/components/ui/TextBox";
+import useCoarsePointer from "@/hooks/useCoarsePointer";
+import {ROOM_OBJECT_HINTS} from "@/data/roomObjects";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
@@ -26,6 +31,7 @@ export default function GameCanvas({ openScreen }) {
     const [interactionType, setInteractionType] = useState(null);
     const [collisionSoundPlay] = useSound(collisionsound);
     const reducedMotion = usePrefersReducedMotion();
+    const coarsePointer = useCoarsePointer();
     const [showGrid] = useState(
         () => typeof window !== "undefined" && window.location.search.includes("debug=grid"),
     );
@@ -120,11 +126,27 @@ export default function GameCanvas({ openScreen }) {
                         <animated.group position={pos} rotation={rot}>
                             <PlayerModel isMoving={isWalking} />
                         </animated.group>
+                        <InteractionMarkers
+                            activeType={isWalking ? null : interactionType}
+                            onSelect={handleClickInteraction}
+                        />
                         {showGrid && <GridDebug />}
                         <RoomCamera playerPosition={pos} reducedMotion={reducedMotion} />
                     </Suspense>
                 </Canvas>
             </div>
+            <ControlsLegend coarse={coarsePointer} hidden={!!interactionType && !isWalking} />
+            {interactionType && !isWalking && (
+                <div className="absolute inset-x-2 bottom-2 z-20 sm:inset-x-4 sm:bottom-4">
+                    <TextBox
+                        lines={[
+                            ROOM_OBJECT_HINTS[interactionType],
+                            `${coarsePointer ? "Tap" : "Press"} A to check it.`,
+                        ]}
+                        onActivate={handleInteract}
+                    />
+                </div>
+            )}
         </section>
     );
 }
