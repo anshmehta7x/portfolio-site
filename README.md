@@ -9,7 +9,7 @@ Live: https://portfolio-site-anshmehta7xs-projects.vercel.app
 
 | Action | Keyboard | On-screen |
 | --- | --- | --- |
-| Move | Arrow keys / WASD | D-pad |
+| Walk (tap to turn, hold to keep walking) | Arrow keys / WASD | D-pad |
 | Check / confirm | Enter, Space, E, Z | A |
 | Back / close | Esc, Backspace, X | B |
 | Contact | M | START |
@@ -34,7 +34,8 @@ Stack: Next.js 14 (App Router), React Three Fiber + drei, Tailwind CSS.
 - `src/components/controls` — D-pad, A/B and START/SELECT buttons
 - `src/hooks/GameInputProvider.jsx`, `useGameInput.js` — one input layer for keyboard and on-screen buttons
 - `src/components/screens/ScreenHost.jsx` — opens content screens and routes B to close them
-- `src/lib/constants.js` — room grid: spawn, collisions, interactable tiles
+- `src/lib/constants.js` — room grid: spawn, collisions, interactable tiles (open `/?debug=grid` to see them over the room)
+- `src/lib/grid.js`, `src/hooks/usePlayerMovement.js` — tile movement rules
 
 ## Credits
 
