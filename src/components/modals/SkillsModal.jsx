@@ -1,82 +1,62 @@
 import React from "react";
 import {
-    CodeXml,
-    FileCode2,
-    Binary,
-    Coffee,
-    Gem,
-    Atom,
-    Box,
-    Wind,
     AppWindow,
-    ServerCog,
+    Atom,
+    Binary,
+    Box,
     Camera,
-    Database,
-    GitMerge,
-    Container,
-    Send,
-    Flame,
     Cloud,
-    Link as LinkIcon,
-    HardHat,
+    CodeXml,
+    Coffee,
+    Container,
+    Database,
+    FileCode2,
+    Flame,
+    Gem,
+    GitMerge,
     Hammer,
-    SheetIcon,
+    HardHat,
+    LinkIcon,
     Monitor,
+    Send,
+    ServerCog,
+    SheetIcon,
     Terminal,
+    Wind,
 } from "lucide-react";
+import { skillsData } from "@/data/skills";
 
-const skillsData = [
-    {
-        category: "Languages",
-        color: "#61DAFB",
-        skills: [
-            { name: "Python", icon: <CodeXml size={22} /> },
-            { name: "JavaScript", icon: <FileCode2 size={22} /> },
-            { name: "TypeScript", icon: <FileCode2 size={22} /> },
-            { name: "C/C++", icon: <Binary size={22} /> },
-            { name: "Java", icon: <Coffee size={22} /> },
-            { name: "Solidity", icon: <Gem size={22} /> },
-        ],
-    },
-    {
-        category: "Frameworks & Libraries",
-        color: "#339933",
-        skills: [
-            { name: "React/Next.js", icon: <Atom size={22} /> },
-            { name: "Node.js", icon: <Box size={22} /> },
-            { name: "TailwindCSS", icon: <Wind size={22} /> },
-            { name: "FastAPI/Flask", icon: <ServerCog size={22} /> },
-            { name: "Three.js", icon: <AppWindow size={22} /> },
-            { name: "Electron", icon: <Monitor size={22} /> },
-            { name: "OpenCV", icon: <Camera size={22} /> },
-        ],
-    },
-    {
-        category: "Databases & Tools",
-        color: "#F26B21",
-        skills: [
-            { name: "SQL", icon: <Database size={22} /> },
-            { name: "MongoDB", icon: <Database size={22} /> },
-            { name: "DynamoDB", icon: <Database size={22} /> },
-            { name: "Git", icon: <GitMerge size={22} /> },
-            { name: "Linux", icon: <Terminal size={22} /> },
-            { name: "Docker", icon: <Container size={22} /> },
-            { name: "AWS", icon: <Cloud size={22} /> },
-            { name: "Firebase", icon: <Flame size={22} /> },
-            { name: "Postman", icon: <Send size={22} /> },
-        ],
-    },
-    {
-        category: "Blockchain",
-        color: "#FFD700",
-        skills: [
-            { name: "Ethereum", icon: <LinkIcon size={22} /> },
-            { name: "Hardhat", icon: <HardHat size={22} /> },
-            { name: "Foundry", icon: <Hammer size={22} /> },
-            { name: "Smart Contracts", icon: <SheetIcon size={22} /> },
-        ],
-    },
-];
+const ICONS = {
+    AppWindow,
+    Atom,
+    Binary,
+    Box,
+    Camera,
+    Cloud,
+    CodeXml,
+    Coffee,
+    Container,
+    Database,
+    FileCode2,
+    Flame,
+    Gem,
+    GitMerge,
+    Hammer,
+    HardHat,
+    LinkIcon,
+    Monitor,
+    Send,
+    ServerCog,
+    SheetIcon,
+    Terminal,
+    Wind,
+};
+
+
+function renderSkillIcon(name) {
+    const Icon = ICONS[name];
+    return Icon ? <Icon size={22} /> : null;
+}
 
 const SkillCard = ({ category, color, skills }) => (
     <div className="bg-slate-800/50 rounded-lg p-5 border border-slate-700 flex flex-col h-full break-inside-avoid mb-6">
@@ -92,7 +72,7 @@ const SkillCard = ({ category, color, skills }) => (
                     key={skill.name}
                     className="bg-slate-900/70 rounded-lg p-3 flex items-center space-x-3 hover:bg-slate-800 transition-colors"
                 >
-                    <div style={{ color: color }}>{skill.icon}</div>
+                    <div style={{ color: color }}>{renderSkillIcon(skill.icon)}</div>
                     <p className="text-sm font-medium text-slate-200">
                         {skill.name}
                     </p>
