@@ -1,6 +1,7 @@
 import GameCanvas from "@/components/GameCanvas";
 import ScreenHost from "@/components/screens/ScreenHost";
 import StartMenu from "@/components/menu/StartMenu";
+import IntroOverlay from "@/components/intro/IntroOverlay";
 
 // Desktop screen: the room plus an always-visible START menu column.
 export default function ScreenArea() {
@@ -15,6 +16,7 @@ export default function ScreenArea() {
                         <StartMenu variant="panel" />
                     </aside>
                     <ScreenHost isConstrained />
+                    <IntroOverlay />
                 </div>
             </div>
             <div aria-hidden="true" className="flex gap-3 mt-5">

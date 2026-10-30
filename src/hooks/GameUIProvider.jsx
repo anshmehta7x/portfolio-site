@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+
+const INTRO_SEEN_KEY = "pf.introSeen";
 
 const GameUIContext = createContext(null);
 
@@ -9,6 +11,35 @@ const GameUIContext = createContext(null);
 export default function GameUIProvider({ children }) {
     const [screen, setScreen] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    // "title" -> "dialog" -> null. First visit only; replayable from OPTIONS.
+    const [intro, setIntro] = useState(null);
+
+    useEffect(() => {
+        let seen = false;
+        try {
+            seen = localStorage.getItem(INTRO_SEEN_KEY) === "1";
+        } catch {
+            // Storage blocked: show the intro every visit.
+        }
+        if (!seen) {
+            setIntro("title");
+        }
+    }, []);
+
+    const replayIntro = useCallback(() => {
+        setScreen(null);
+        setMenuOpen(false);
+        setIntro("title");
+    }, []);
+
+    const finishIntro = useCallback(() => {
+        setIntro(null);
+        try {
+            localStorage.setItem(INTRO_SEEN_KEY, "1");
+        } catch {
+            // Ignore: worst case the intro shows again next visit.
+        }
+    }, []);
 
     const openScreen = useCallback((name) => setScreen(name), []);
     const closeScreen = useCallback(() => setScreen(null), []);
@@ -16,8 +47,19 @@ export default function GameUIProvider({ children }) {
     const closeMenu = useCallback(() => setMenuOpen(false), []);
 
     const value = useMemo(
-        () => ({ screen, openScreen, closeScreen, menuOpen, openMenu, closeMenu }),
-        [screen, openScreen, closeScreen, menuOpen, openMenu, closeMenu],
+        () => ({
+            screen,
+            openScreen,
+            closeScreen,
+            menuOpen,
+            openMenu,
+            closeMenu,
+            intro,
+            setIntro,
+            replayIntro,
+            finishIntro,
+        }),
+        [screen, openScreen, closeScreen, menuOpen, openMenu, closeMenu, intro, replayIntro, finishIntro],
     );
 
     return <GameUIContext.Provider value={value}>{children}</GameUIContext.Provider>;

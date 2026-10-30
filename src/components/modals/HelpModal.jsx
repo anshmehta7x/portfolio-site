@@ -1,6 +1,7 @@
 "use client";
 
 import { X, MousePointerClick, Move, Keyboard } from "lucide-react";
+import { useGameUI } from "@/hooks/GameUIProvider";
 
 const controls = [
     {
@@ -38,6 +39,8 @@ export default function HelpModal({
     onClose,
     isConstrained = false,
 }) {
+    const { replayIntro } = useGameUI();
+
     const sectionClasses = isConstrained
         ? "absolute inset-0 w-full h-full flex justify-center items-center bg-black bg-opacity-60 z-50"
         : "fixed inset-0 flex justify-center items-center bg-black bg-opacity-60 z-[9999] p-4";
@@ -64,11 +67,20 @@ export default function HelpModal({
                                     <X className="h-6 w-6 sm:h-7 sm:w-7" />
                                 </button>
                                 <h1 className="text-[#2A2B3F] text-2xl sm:text-3xl font-pixeboy text-center tracking-wide">
-                                    GUIDE
+                                    OPTIONS
                                 </h1>
                             </div>
 
                             <div className="flex-grow overflow-y-auto p-2 sm:p-4 scrollbar-hide">
+                                <div className="mb-3 flex flex-wrap justify-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={replayIntro}
+                                        className="fr-box min-h-[44px] rounded-md px-4 text-lg"
+                                    >
+                                        REPLAY INTRO
+                                    </button>
+                                </div>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-4">
                                     <div className="space-y-2 sm:space-y-4">
                                         {controls.map((control) => {
