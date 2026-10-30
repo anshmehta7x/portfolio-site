@@ -80,3 +80,48 @@
 .glow-text {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
 }
+
+/* ---- FireRed UI kit ---------------------------------------------------- */
+:root {
+  --fr-paper: #f8f8f8;
+  --fr-ink: #404048;
+  --fr-ink-shadow: #d0d0c8;
+  --fr-frame: #3c4a60;
+  --fr-frame-inner: #9cb0c8;
+  --fr-accent: #e03828;
+}
+
+/* White text box with a dark rounded double border, as in FireRed. */
+.fr-box {
+  background: var(--fr-paper);
+  color: var(--fr-ink);
+  border: 3px solid var(--fr-frame);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 0 2px var(--fr-paper),
+    inset 0 0 0 4px var(--fr-frame-inner),
+    0 3px 0 rgba(0, 0, 0, 0.35);
+  font-family: var(--pixeboy), monospace;
+  text-shadow: 1px 1px 0 var(--fr-ink-shadow);
+  image-rendering: pixelated;
+}
+
+.fr-more-arrow {
+  color: var(--fr-accent);
+  text-shadow: none;
+}
+
+@keyframes fr-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes fr-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(2px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fr-bounce { animation: fr-bounce 0.8s steps(2, jump-none) infinite; }
+  .fr-nudge { animation: fr-nudge 0.6s steps(2, jump-none) infinite; }
+}
