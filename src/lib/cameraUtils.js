@@ -8,6 +8,7 @@ const ROOM_CENTER = new THREE.Vector3(0.5, 0, -0.4);
 // Fixed 3/4 top-down view, looking north into the room like FireRed.
 const VIEW_DIRECTION = new THREE.Vector3(0, 1, 0.7).normalize();
 const SMOOTHING = 4;
+const FRONT_LIMIT_Z = 0.4;
 
 // Distance needed to frame the room; narrow (portrait) screens zoom in and
 // follow Red more closely because the whole room can't fit.
@@ -34,6 +35,8 @@ function RoomCamera({ playerPosition, reducedMotion }) {
         const { desired, player } = scratch.current;
         player.set(px, 0, pz);
         desired.copy(ROOM_CENTER).lerp(player, follow);
+        // Don't drift past the room's front edge (only black void beyond it).
+        desired.z = Math.min(desired.z, FRONT_LIMIT_Z);
 
         if (!targetRef.current) {
             targetRef.current = desired.clone();
