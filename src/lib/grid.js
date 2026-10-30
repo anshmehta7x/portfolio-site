@@ -46,3 +46,53 @@ export function getInteractionAt({ x, y }) {
     );
     return interaction ? interaction.type : null;
 }
+
+const tileKey = ({ x, y }) => `${x},${y}`;
+
+// Snap a floor point (world x/z) to the centre of the tile it falls in.
+export function snapToTile(worldX, worldZ) {
+    return { x: Math.floor(worldX) + 0.5, y: Math.floor(worldZ) + 0.5 };
+}
+
+// Breadth-first search over walkable tiles. Returns the shortest list of
+// tiles to step through (excluding `start`) to reach any of `goals`, or
+// null if none is reachable. An empty list means Red is already there.
+export function findPath(start, goals) {
+    const goalKeys = new Set(goals.filter(isWalkable).map(tileKey));
+    if (goalKeys.size === 0) {
+        return null;
+    }
+    const cameFrom = new Map([[tileKey(start), null]]);
+    const queue = [start];
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (goalKeys.has(tileKey(current))) {
+            const path = [];
+            let node = current;
+            while (tileKey(node) !== tileKey(start)) {
+                path.unshift(node);
+                node = cameFrom.get(tileKey(node));
+            }
+            return path;
+        }
+        Object.keys(DIRECTION_DELTAS).forEach((direction) => {
+            const next = stepFrom(current, direction);
+            if (isWalkable(next) && !cameFrom.has(tileKey(next))) {
+                cameFrom.set(tileKey(next), current);
+                queue.push(next);
+            }
+        });
+    }
+    return null;
+}
+
+export function getDirectionBetween(from, to) {
+    const entry = Object.entries(DIRECTION_DELTAS).find(
+        ([, [dx, dy]]) => from.x + dx === to.x && from.y + dy === to.y,
+    );
+    return entry ? entry[0] : null;
+}
+
+export function getInteraction(type) {
+    return interactions.find((interaction) => interaction.type === type) || null;
+}

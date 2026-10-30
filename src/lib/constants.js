@@ -17,10 +17,13 @@ const collisions = [
     [2.5, -2.5],
 ];
 
+// positions: tiles Red stands on to check the object; facing: which way he
+// turns to look at it when he arrives there by click/tap.
 const interactions = [
     {
         type: "computer",
         positions: [[-4.5, -1.5]],
+        facing: "up",
     },
     {
         type: "bookshelf",
@@ -28,6 +31,7 @@ const interactions = [
             [-0.5, -1.5],
             [-1.5, -1.5],
         ],
+        facing: "up",
     },
     {
         type: "television",
@@ -35,6 +39,7 @@ const interactions = [
             [0.5, 1.5],
             [0.5, 0.5],
         ],
+        facing: "up",
     },
     {
         type: "certificate",
@@ -42,6 +47,7 @@ const interactions = [
             [5.5, -1.5],
             [5.5, -2.5],
         ],
+        facing: "up",
     },
 ];
 
