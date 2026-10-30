@@ -10,7 +10,7 @@ const KEYBOARD_LEGEND = [
     { key: "CLICK", action: "Walk" },
     { key: "ENTER", action: "Check" },
     { key: "ESC", action: "Back" },
-    { key: "M", action: "Contact" },
+    { key: "M", action: "Menu" },
 ];
 
 const TOUCH_LEGEND = [
@@ -18,7 +18,7 @@ const TOUCH_LEGEND = [
     { key: "TAP", action: "Walk" },
     { key: "A", action: "Check" },
     { key: "B", action: "Back" },
-    { key: "START", action: "Contact" },
+    { key: "START", action: "Menu" },
 ];
 
 function readDismissed() {
