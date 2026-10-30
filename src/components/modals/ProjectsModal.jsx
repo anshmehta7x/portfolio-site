@@ -8,6 +8,18 @@ import { INPUT_PRIORITY } from "@/lib/input";
 // Tech stack for ScriptSync is from the resume. Others are based on their descriptions.
 const projectsData = [
     {
+        title: "animatrix - AniMe Matrix control for Linux",
+        description:
+            "Control the ASUS ROG AniMe Matrix LED lid display on Linux: images, GIFs, video, text, clocks, a music visualiser and generative effects. An open-source alternative to Armoury Crate / G-Helper with a systemd daemon (D-Bus API), Electron tray app with live LED preview, CLI and TypeScript library.",
+        media: "/demo-images/animatrix.png",
+        mediaType: "image",
+        mediaFit: "contain",
+        liveUrl: "https://anshmehta7x.github.io/animatrix/",
+        liveUrlText: "Website",
+        githubUrl: "https://github.com/anshmehta7x/animatrix",
+        techStack: ["TypeScript", "Electron", "Node.js", "D-Bus", "systemd", "ffmpeg", "PipeWire"],
+    },
+    {
         title: "ScriptSync - 1st Place @ VIT Hack",
         description:
             "Real-time, multithreaded video translation using GPU-accelerated OCR and intelligent caching.",
@@ -203,7 +215,7 @@ export default function ProjectsModal({
                                     src={currentProject.media}
                                     alt={`${currentProject.title} screenshot`}
                                     fill={true}
-                                    className="w-full h-full object-cover"
+                                    className={`w-full h-full ${currentProject.mediaFit === "contain" ? "object-contain" : "object-cover"}`}
                                 />
                             )}
                         </div>

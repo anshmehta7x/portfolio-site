@@ -21,6 +21,8 @@ import {
     HardHat,
     Hammer,
     SheetIcon,
+    Monitor,
+    Terminal,
 } from "lucide-react";
 
 const skillsData = [
@@ -45,6 +47,7 @@ const skillsData = [
             { name: "TailwindCSS", icon: <Wind size={22} /> },
             { name: "FastAPI/Flask", icon: <ServerCog size={22} /> },
             { name: "Three.js", icon: <AppWindow size={22} /> },
+            { name: "Electron", icon: <Monitor size={22} /> },
             { name: "OpenCV", icon: <Camera size={22} /> },
         ],
     },
@@ -56,6 +59,7 @@ const skillsData = [
             { name: "MongoDB", icon: <Database size={22} /> },
             { name: "DynamoDB", icon: <Database size={22} /> },
             { name: "Git", icon: <GitMerge size={22} /> },
+            { name: "Linux", icon: <Terminal size={22} /> },
             { name: "Docker", icon: <Container size={22} /> },
             { name: "AWS", icon: <Cloud size={22} /> },
             { name: "Firebase", icon: <Flame size={22} /> },
