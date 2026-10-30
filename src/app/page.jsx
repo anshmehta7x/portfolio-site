@@ -1,48 +1,42 @@
-"use client";
+import Link from "next/link";
+import HomeClient from "@/components/HomeClient";
+import { projectsData } from "@/data/projects";
+import { trainer } from "@/data/trainer";
 
-import { useEffect, useState } from "react";
-import isMobile from "is-mobile";
-import dynamic from "next/dynamic";
-import GameInputProvider from "@/hooks/GameInputProvider";
-import GameUIProvider from "@/hooks/GameUIProvider";
-
-const GameBoy = dynamic(() => import("@/components/GameBoy"), {
-    ssr: false,
-    loading: () => <div className="text-white">Loading Console...</div>,
-});
-
-const Handheld = dynamic(() => import("@/components/Handheld"), {
-    ssr: false,
-    loading: () => <div className="text-white">Loading Console...</div>,
-});
-
+// Server-rendered: crawlers and screen readers get a plain summary and a link
+// to the full text version; everyone else gets the interactive room.
 export default function Home() {
-    const [isClientMobile, setIsClientMobile] = useState(false);
-    const [hasMounted, setHasMounted] = useState(false);
-
-    useEffect(() => {
-        setIsClientMobile(isMobile());
-        setHasMounted(true);
-
-    }, []);
-
-    if (!hasMounted) {
-        return (
-                <main className="w-screen h-screen flex items-center justify-center bg-black overflow-hidden">
-                <div className="text-white">Loading...</div>
-            </main>
-        );
-    }
-
-    const Console = isClientMobile ? GameBoy : Handheld;
-
     return (
-        <GameInputProvider>
-            <GameUIProvider>
-                <main className="w-screen h-[100dvh] flex items-center justify-center bg-neutral-950 overflow-hidden p-2 sm:p-4">
-                    <Console />
-                </main>
-            </GameUIProvider>
-        </GameInputProvider>
+        <>
+            <section className="sr-only">
+                <h1>{trainer.name}: {trainer.title}</h1>
+                <ul>
+                    {trainer.lines.map((line) => (
+                        <li key={line}>{line}</li>
+                    ))}
+                </ul>
+                <h2>Projects</h2>
+                <ul>
+                    {projectsData.map((project) => (
+                        <li key={project.title}>
+                            {project.title}: {project.description}
+                        </li>
+                    ))}
+                </ul>
+                <p>
+                    <Link href="/text">Read the full portfolio as plain text</Link>
+                </p>
+            </section>
+            <noscript>
+                <p className="p-6 text-center text-white">
+                    The interactive room needs JavaScript.{" "}
+                    <a className="underline" href="/text">
+                        Read the text version of this portfolio
+                    </a>
+                    .
+                </p>
+            </noscript>
+            <HomeClient />
+        </>
     );
 }

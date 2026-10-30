@@ -30,7 +30,9 @@ export default function StartMenu({ variant = "overlay" }) {
     const isPanel = variant === "panel";
 
     const onSelect = (entry) => {
-        if (entry.screen) {
+        if (entry.href) {
+            window.location.assign(entry.href);
+        } else if (entry.screen) {
             openMenu();
             openScreen(entry.screen);
         } else {
@@ -74,7 +76,7 @@ export default function StartMenu({ variant = "overlay" }) {
                 }`}
             >
                 {isPanel && (
-                    <p className="px-3 pb-1 text-sm opacity-70">
+                    <p className="px-3 pb-1 text-sm opacity-70 [@media(max-height:780px)]:hidden">
                         {focused ? "B to close" : "START or M"}
                     </p>
                 )}
@@ -102,7 +104,7 @@ export default function StartMenu({ variant = "overlay" }) {
                 </ul>
             </nav>
             {/* Phones have no room for the description under six 44px rows. */}
-            {isPanel && <div className="mt-3">{description}</div>}
+            {isPanel && <div className="mt-3 [@media(max-height:780px)]:hidden">{description}</div>}
         </>
     );
 }

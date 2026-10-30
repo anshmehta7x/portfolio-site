@@ -3,7 +3,7 @@
 A 3D take on Red's bedroom from Pokémon FireRed, rendered inside a handheld console.
 Walk around the room and check objects to see projects, skills, achievements, résumé and contact details.
 
-Live: https://portfolio-site-anshmehta7xs-projects.vercel.app
+Live: https://portfolio-site-anshmehta7xs-projects.vercel.app (plain text version at `/text`)
 
 ## Controls
 
@@ -13,7 +13,7 @@ Live: https://portfolio-site-anshmehta7xs-projects.vercel.app
 | Check / confirm | Enter, Space, E, Z | A |
 | Back / close | Esc, Backspace, X, B | B |
 | Menu (Pokédex, Moves, Badges, Trainer Card, Options) | M | START or the MENU chip |
-| Help / options | H, Shift | SELECT |
+| Help / options | H | SELECT |
 
 ## Development
 
@@ -28,7 +28,8 @@ Stack: Next.js 14 (App Router), React Three Fiber + drei, Tailwind CSS.
 
 ## Layout
 
-- `src/app` — page entry, layout, fonts
+- `src/app` — server page (crawlable summary) + `/text` plain version, layout/metadata, fonts
+- `src/data` — all portfolio content (projects, skills, achievements, contact, trainer, menu, copy)
 - `src/components/GameCanvas.jsx` — the 3D room, player movement and interactions
 - `src/components/GameBoy.jsx` / `Handheld.jsx` — mobile and desktop console shells
 - `src/components/controls` — D-pad, A/B and START/SELECT buttons

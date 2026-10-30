@@ -21,7 +21,6 @@ const KEY_MAP = {
     x: "b",
     b: "b",
     m: "start",
-    Shift: "select",
     h: "select",
 };
 
