@@ -43,6 +43,9 @@ export default function OptionsScreen({ onClose, isConstrained = false }) {
                     <button type="button" onClick={replayIntro} className="fr-box min-h-[44px] rounded-md px-4 text-lg">
                         REPLAY INTRO
                     </button>
+                    <a href="/text" className="fr-box flex min-h-[44px] items-center rounded-md px-4 text-lg">
+                        TEXT VERSION
+                    </a>
                 </div>
             </div>
         </ScreenFrame>
