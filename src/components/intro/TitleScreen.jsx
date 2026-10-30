@@ -40,10 +40,10 @@ export default function TitleScreen({ onStart }) {
             className="fr-title absolute inset-0 z-40 flex flex-col items-center justify-center gap-6 px-4 text-center cursor-default"
         >
             <div>
-                <p className="font-arcade text-5xl leading-none text-[#f8f8f8] sm:text-7xl [text-shadow:4px_4px_0_#e03828]">
+                <p className="font-pixeboy text-6xl leading-none text-[#f8f8f8] sm:text-8xl [text-shadow:4px_4px_0_#e03828]">
                     ANSH
                 </p>
-                <p className="font-arcade text-3xl leading-none text-[#f8f8f8] sm:text-5xl [text-shadow:3px_3px_0_#e03828]">
+                <p className="font-pixeboy text-4xl leading-none text-[#f8f8f8] sm:text-6xl [text-shadow:3px_3px_0_#e03828]">
                     MEHTA
                 </p>
                 <p className="mt-3 font-pixeboy text-base tracking-[0.3em] text-[#f8c040] sm:text-2xl">
