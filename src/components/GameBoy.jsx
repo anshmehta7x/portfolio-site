@@ -1,104 +1,51 @@
 "use client";
-import { useState } from "react";
-import GameCanvas from "@/components/GameCanvas";
+
 import Image from "next/image";
+import GameCanvas from "@/components/GameCanvas";
 import CurvedBottom from "@/components/GameBoyParts/CurvedBottom";
-import StartSelect from "@/components/GameBoyParts/StartSelect";
-import ABbuttons from "@/components/GameBoyParts/ABbuttons";
-import Dpad from "@/components/GameBoyParts/Dpad";
+import DPad from "@/components/controls/DPad";
+import FaceButtons from "@/components/controls/FaceButtons";
+import PillButton from "@/components/controls/PillButton";
+import ScreenHost from "@/components/screens/ScreenHost";
 
-export default function GameBoy({
-    setAchievementsVisibility,
-    setResumeVisibility,
-    setSkillsVisibility,
-    setGbaPress,
-    setProjectsVisibility,
-    setContactVisibility,
-    gbaPress,
-}) {
-    const [pressedButton, setPressedButton] = useState(null);
-    const [lastTouchTime, setLastTouchTime] = useState(0);
-
-    function buttonHandler(pressed) {
-        setGbaPress(pressed);
-    }
-
-    function handleMouseDown(button, event) {
-        event.preventDefault();
-        const now = Date.now();
-        if (event.type === "mousedown" && now - lastTouchTime < 500) return;
-        if (
-            event.type === "mousedown" &&
-            event.sourceCapabilities?.firesTouchEvents
-        )
-            return;
-        setPressedButton(button);
-        buttonHandler(button);
-    }
-
-    function handleMouseUp(event) {
-        const now = Date.now();
-        if (event && event.type === "mouseup" && now - lastTouchTime < 500)
-            return;
-        if (
-            event &&
-            event.type === "mouseup" &&
-            event.sourceCapabilities?.firesTouchEvents
-        )
-            return;
-        setPressedButton(null);
-    }
-
-    function handleTouchStart(button, event) {
-        event.preventDefault();
-        setLastTouchTime(Date.now());
-        setPressedButton(button);
-        buttonHandler(button);
-    }
-
-    function handleTouchEnd(event) {
-        event.preventDefault();
-        setPressedButton(null);
-    }
-
+// Portrait handheld used on phones. Screens open full-viewport on top of it.
+export default function GameBoy({ screen, openScreen, closeScreen }) {
     return (
-        <div className="relative w-full h-full max-w-full max-h-full aspect-[11/17] flex flex-col shadow-2xl shadow-black/50">
-            {/* Top part of the shell. `flex-grow` makes it take up the remaining space. */}
-            <div className="bg-gradient-to-r from-violet-700 to-indigo-900 w-full flex-grow rounded-t-xl flex flex-col items-center relative border-4 border-solid border-b-0 border-slate-900">
-                <div className="bg-gradient-to-r from-black to-neutral-800 w-[90%] h-[50%] rounded-t-lg mt-4 flex items-center justify-center relative border-4 border-solid border-b-0 border-slate-800 shadow-[inset_1px_1px_0_0_rgba(255,255,255,0.15),inset_-1px_0_0_0_rgba(255,255,255,0.15)]">
-                    <div className="bg-[#000000] w-[80%] h-[80%] rounded-sm border-solid border-8 border-t-4 border-black border-opacity-90 flex items-center justify-center overflow-hidden">
-                        <GameCanvas
-                            setAchievementsVisibility={
-                                setAchievementsVisibility
-                            }
-                            setResumeVisibility={setResumeVisibility}
-                            setSkillsVisibility={setSkillsVisibility}
-                            setProjectsVisibility={setProjectsVisibility}
-                            setContactVisibility={setContactVisibility}
-                            gbaPress={gbaPress}
-                            setGbaPress={setGbaPress}
-                        />
+        <>
+        <div className="relative w-full h-full max-w-full max-h-full aspect-[11/17] flex flex-col drop-shadow-2xl">
+            <div className="bg-shell w-full flex-grow rounded-t-2xl flex flex-col items-center relative border-4 border-b-0 border-shell-dark shadow-[inset_0_3px_0_rgba(255,255,255,0.18)]">
+                <div className="bg-bezel w-[92%] h-[52%] rounded-t-lg mt-4 flex items-center justify-center relative border-4 border-b-0 border-bezel-light">
+                    <div className="relative bg-black w-[88%] h-[88%] rounded-sm overflow-hidden">
+                        <GameCanvas openScreen={openScreen} />
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-black to-neutral-800 w-[90%] h-[2rem] rounded-b-[100%] relative z-10 border-4 border-solid border-t-0 border-slate-800 flex items-center justify-center shadow-[inset_1px_-1px_0_0_rgba(255,255,255,0.15),inset_-1px_0_0_0_rgba(255,255,255,0.15)]">
-                    <Image src="/gameboy-images/gameboy-bottom.svg" alt={"hi"}
-                           className="-mt-10"
-                           width="161"
-                           height="19"
-                           loading="lazy"
+                <div className="bg-bezel w-[92%] h-[2rem] rounded-b-[100%] relative z-10 border-4 border-t-0 border-bezel-light flex items-center justify-center">
+                    <Image
+                        src="/gameboy-images/gameboy-bottom.svg"
+                        alt=""
+                        className="-mt-10"
+                        width="161"
+                        height="19"
+                        loading="lazy"
                     />
                 </div>
 
-                <Dpad handleMouseDown={handleMouseDown} handleMouseUp={handleMouseUp} handleTouchStart={handleTouchStart} handleTouchEnd={handleTouchEnd} pressedButton={pressedButton}/>
-
-                {/* A and B buttons */}
-                <ABbuttons handleMouseDown={handleMouseDown} handleMouseUp={handleMouseUp} handleTouchStart={handleTouchStart} handleTouchEnd={handleTouchEnd} pressedButton={pressedButton}/>
-
-                {/* Start Select */}
-                <StartSelect handleMouseDown={handleMouseDown} handleMouseUp={handleMouseUp} handleTouchStart={handleTouchStart} handleTouchEnd={handleTouchEnd} pressedButton={pressedButton}/>
+                <div className="absolute left-[5%] bottom-[17%]">
+                    <DPad />
+                </div>
+                <div className="absolute right-[5%] bottom-[22%]">
+                    <FaceButtons />
+                </div>
+                <div className="absolute bottom-[3%] flex gap-2">
+                    <PillButton button="select" label="HELP" />
+                    <PillButton button="start" label="CONTACT" />
+                </div>
             </div>
-            <CurvedBottom/>
+            <CurvedBottom />
         </div>
+        {/* Outside the shell: its drop-shadow filter would trap position:fixed screens. */}
+        <ScreenHost screen={screen} onClose={closeScreen} />
+        </>
     );
 }

@@ -1,38 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Ansh Mehta — portfolio
 
-werwererew
+A 3D take on Red's bedroom from Pokémon FireRed, rendered inside a handheld console.
+Walk around the room and check objects to see projects, skills, achievements, résumé and contact details.
 
-## Getting Started
+Live: https://portfolio-site-anshmehta7xs-projects.vercel.app
 
-First, run the development server:
+## Controls
+
+| Action | Keyboard | On-screen |
+| --- | --- | --- |
+| Move | Arrow keys / WASD | D-pad |
+| Check / confirm | Enter, Space, E, Z | A |
+| Back / close | Esc, Backspace, X | B |
+| Contact | M | START |
+| Help | H, Shift | SELECT |
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+npm run dev     # http://localhost:3000
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Stack: Next.js 14 (App Router), React Three Fiber + drei, Tailwind CSS.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Layout
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `src/app` — page entry, layout, fonts
+- `src/components/GameCanvas.jsx` — the 3D room, player movement and interactions
+- `src/components/GameBoy.jsx` / `Handheld.jsx` — mobile and desktop console shells
+- `src/components/controls` — D-pad, A/B and START/SELECT buttons
+- `src/hooks/GameInputProvider.jsx`, `useGameInput.js` — one input layer for keyboard and on-screen buttons
+- `src/components/screens/ScreenHost.jsx` — opens content screens and routes B to close them
+- `src/lib/constants.js` — room grid: spawn, collisions, interactable tiles
 
-## Learn More
+## Credits
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Room model: "Pokemon FireRed - Player's Room" by Wesai, CC-BY-4.0 ([Sketchfab](https://sketchfab.com/3d-models/pokemon-firered-players-room-b23b6b253207463c97db2a7092adff74)).
+Pokémon is © Nintendo / Game Freak / The Pokémon Company; this is a non-commercial fan tribute.
