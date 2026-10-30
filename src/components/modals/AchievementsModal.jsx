@@ -11,95 +11,9 @@ import {
     X,
     Star,
 } from "lucide-react";
+import { achievements } from "@/data/achievements";
 
-const achievements = [
-        {
-        id: "amazon",
-        title: "Software Development Engineer Intern - Amazon",
-        category: "Professional",
-        icon: Briefcase,
-        color: "from-orange-500 to-yellow-600",
-        bgGradient: "from-orange-50 to-yellow-50",
-        description: `Software Development Engineer Intern (Jan 2026 - June 2026)\nIncoming SDE Intern at Amazon.`,
-        highlights: [
-            "Incoming SDE Intern",
-            "Amazon",
-            "Software Development"
-        ],
-    },
-    {
-        id: "education",
-        title: "Education - Vellore Institute of Technology",
-        category: "Education",
-        icon: GraduationCap,
-        color: "from-blue-500 to-indigo-600",
-        bgGradient: "from-blue-50 to-indigo-50",
-        description: `B.Tech in Computer Science and Engineering (2022 - 2026)\nGPA: 9.10/10\nTechnical Head at IEEE-Computer Society`,
-        highlights: ["9.10/10 GPA", "Technical Head", "CSE Major"],
-    },
-    {
-        id: "internship",
-        title: "Internship - XDC Network, Dubai",
-        category: "Professional",
-        icon: Briefcase,
-        color: "from-emerald-500 to-teal-600",
-        bgGradient: "from-emerald-50 to-teal-50",
-        description: `Software Developer Intern (June 2024 - July 2024)\n• Built Solidity smart contract dApps\n• Developed secure test protocols with Hardhat + Foundry\n• Analyzed DeFi protocols: yield farming + liquidity pools`,
-        highlights: [
-            "Smart Contracts",
-            "Blockchain and dApps",
-            "Software Development",
-        ],
-    },
-    {
-        id: "hackathon1",
-        title: "1st Place - VIT Central Hackathon",
-        category: "Achievement",
-        icon: Trophy,
-        color: "from-yellow-500 to-orange-600",
-        bgGradient: "from-yellow-50 to-orange-50",
-        description: `Created ScriptSync: real-time video translation with GPU OCR and OpenCV,\n60% faster processing with intelligent caching + text replacement`,
-        highlights: [
-            "1st Place",
-            "60% Performance Boost",
-            "Real-time Translation",
-        ],
-    },
-    {
-        id: "hackathon2",
-        title: "2nd Place - Code4Change Hackathon",
-        category: "Achievement",
-        icon: Award,
-        color: "from-purple-500 to-violet-600",
-        bgGradient: "from-purple-50 to-violet-50",
-        description: `Developed ForReal: AI-based deepfake detector for audio + image inputs`,
-        highlights: ["2nd Place", "AI/ML", "Deepfake Detection"],
-    },
-    {
-        id: "hackathon3",
-        title: "3rd Place - DevJams",
-        category: "Achievement",
-        icon: Star,
-        color: "from-pink-500 to-rose-600",
-        bgGradient: "from-pink-50 to-rose-50",
-        description: `Built StoryScape: GenAI tool converting stories into audio-visual scenes`,
-        highlights: ["3rd Place", "GenAI", "Audio-Visual"],
-    },
-    {
-        id: "organizer",
-        title: "Organizer - HackBattle",
-        category: "Leadership",
-        icon: Users,
-        color: "from-cyan-500 to-blue-600",
-        bgGradient: "from-cyan-50 to-blue-50",
-        description: `Organized HackBattle with 600+ participants and multiple sponsor partners`,
-        highlights: [
-            "600+ Participants",
-            "Multiple Sponsors",
-            "Event Leadership",
-        ],
-    },
-];
+const ICONS = { GraduationCap, Briefcase, Trophy, Award, Users, Star };
 
 export default function AchievementsModal({
     visibility,
@@ -147,7 +61,7 @@ export default function AchievementsModal({
                             {/* Achievements Grid */}
                             <div className="flex-grow overflow-auto px-2 md:px-[5vw] pb-6 md:pb-10 scrollbar-hide space-y-5 md:space-y-7">
                                 {achievements.map((achievement, index) => {
-                                    const Icon = achievement.icon;
+                                    const Icon = ICONS[achievement.icon];
                                     const isExpanded =
                                         expandedCard === achievement.id;
                                     const isHovered =
