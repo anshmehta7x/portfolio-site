@@ -33,6 +33,7 @@ Stack: Next.js 14 (App Router), React Three Fiber + drei, Tailwind CSS.
 - `src/components/GameBoy.jsx` / `Handheld.jsx` — mobile and desktop console shells
 - `src/components/controls` — D-pad, A/B and START/SELECT buttons
 - `src/hooks/GameInputProvider.jsx`, `useGameInput.js` — one input layer for keyboard and on-screen buttons
+- `src/components/intro` — title screen (doubles as the asset loader) and first-visit welcome; replay from OPTIONS
 - `src/components/screens/ScreenHost.jsx` — opens content screens and routes B to close them
 - `src/lib/constants.js` — room grid: spawn, collisions, interactable tiles (open `/?debug=grid` to see them over the room)
 - `src/lib/grid.js`, `src/hooks/usePlayerMovement.js` — tile movement rules

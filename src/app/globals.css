@@ -153,3 +153,19 @@
   background: currentColor;
   transform: skewY(-35deg);
 }
+
+/* Title / intro backdrop: dark with a faint scanline, like a GBA boot. */
+.fr-title {
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at 50% 40%, #3a1410 0%, #0c0c10 70%);
+}
+
+@keyframes fr-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fr-blink { animation: fr-blink 1s steps(1) infinite; }
+}
