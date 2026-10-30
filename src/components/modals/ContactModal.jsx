@@ -1,9 +1,13 @@
 "use client";
 import { useEffect } from "react";
-import { Mail, Linkedin, Github } from "lucide-react";
-import { contactLinks } from "@/data/contact";
+import { Mail, Linkedin, Github, FileText } from "lucide-react";
+import { contactLinks, resume } from "@/data/contact";
 
-const ICONS = { Mail, Linkedin, Github };
+const ICONS = { Mail, Linkedin, Github, FileText };
+const LINKS = [
+    ...contactLinks,
+    { label: "Resume", href: resume.href, display: resume.label, icon: "FileText" },
+];
 
 export default function ContactModal({
     visibility,
@@ -75,7 +79,7 @@ export default function ContactModal({
 
                     {/* Contact Links */}
                     <div className="space-y-4">
-                        {contactLinks.map((link, index) => (
+                        {LINKS.map((link, index) => (
                             <div
                                 key={link.label}
                                 className="group relative"

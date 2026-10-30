@@ -10,7 +10,7 @@ const controls = [
             { key: "↑ ↓ ← → / WASD", action: "Walk (tap to turn)" },
             { key: "Enter / E / Z", action: "Interact" },
             { key: "Esc / X", action: "Close" },
-            { key: "M", action: "Contact" },
+            { key: "M", action: "Menu" },
         ],
     },
     {
@@ -20,7 +20,8 @@ const controls = [
             { key: "D-Pad", action: "Walk (hold)" },
             { key: "A Button", action: "Interact" },
             { key: "Click Object", action: "Interact" },
-            { key: "B Button", action: "Close modals" },
+            { key: "B Button", action: "Back" },
+            { key: "START", action: "Menu" },
         ],
     },
 ];

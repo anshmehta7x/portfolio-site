@@ -28,7 +28,7 @@ export default function WelcomePopup({ isOpen, onClose }) {
                                 Welcome to my interactive portfolio! Use your
                                 arrow keys (or the on-screen controls) to move
                                 around. Press &apos;A&apos; or click on glowing
-                                objects to interact. Check out the HELP button
+                                objects to interact. Press START (or M) for the menu
                                 for more info. Enjoy your stay!
                             </p>
                             <button
