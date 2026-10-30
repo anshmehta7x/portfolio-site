@@ -19,6 +19,7 @@ const KEY_MAP = {
     Escape: "b",
     Backspace: "b",
     x: "b",
+    b: "b",
     m: "start",
     Shift: "select",
     h: "select",

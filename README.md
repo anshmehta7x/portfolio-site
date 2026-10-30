@@ -11,7 +11,7 @@ Live: https://portfolio-site-anshmehta7xs-projects.vercel.app
 | --- | --- | --- |
 | Walk (tap to turn, hold to keep walking) | Arrow keys / WASD | D-pad |
 | Check / confirm | Enter, Space, E, Z | A |
-| Back / close | Esc, Backspace, X | B |
+| Back / close | Esc, Backspace, X, B | B |
 | Contact | M | START |
 | Help | H, Shift | SELECT |
 
