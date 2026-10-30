@@ -13,7 +13,7 @@ Live: https://portfolio-site-anshmehta7xs-projects.vercel.app (plain text versio
 | Check / confirm | Enter, Space, E, Z | A |
 | Back / close | Esc, Backspace, X, B | B |
 | Menu (Pokédex, Moves, Badges, Trainer Card, Options) | M | START or the MENU chip |
-| Help / options | H, Shift | SELECT |
+| Help / options | H | SELECT |
 
 ## Development
 

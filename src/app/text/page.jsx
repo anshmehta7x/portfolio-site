@@ -56,7 +56,7 @@ export default function TextVersion() {
                     </Link>
                 </p>
                 <header className="mt-6">
-                    <h1 className="font-arcade text-5xl leading-none text-[#303038] [text-shadow:3px_3px_0_#e8a090] sm:text-6xl">
+                    <h1 className="font-pixeboy text-5xl leading-none text-[#303038] [text-shadow:3px_3px_0_#e8a090] sm:text-6xl">
                         Ansh Mehta
                     </h1>
                     <p className="mt-3 text-xl">{trainer.title}</p>
