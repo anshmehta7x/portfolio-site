@@ -7,18 +7,17 @@ const controls = [
         title: "Keyboard",
         Icon: Keyboard,
         keys: [
-            { key: "W / ↑", action: "Move Forward" },
-            { key: "A / ←", action: "Turn Left" },
-            { key: "S / ↓", action: "Turn Back" },
-            { key: "D / →", action: "Turn Right" },
-            { key: "E / Enter", action: "Interact" },
+            { key: "↑ ↓ ← → / WASD", action: "Walk (tap to turn)" },
+            { key: "Enter / E / Z", action: "Interact" },
+            { key: "Esc / X", action: "Close" },
+            { key: "M", action: "Contact" },
         ],
     },
     {
         title: "On-Screen / Mouse",
         Icon: MousePointerClick,
         keys: [
-            { key: "D-Pad", action: "Move / Turn" },
+            { key: "D-Pad", action: "Walk (hold)" },
             { key: "A Button", action: "Interact" },
             { key: "Click Object", action: "Interact" },
             { key: "B Button", action: "Close modals" },
