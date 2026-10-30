@@ -5,14 +5,15 @@ import {Suspense, useCallback, useRef, useState} from "react";
 import {animated, useSpring} from "@react-spring/three";
 import useSound from "use-sound";
 import {RoomCamera} from "@/lib/cameraUtils";
-import {cameraSpawn, interactions} from "@/lib/constants";
-import {getFacingRotation, getInteractionAt, getShortestRotation} from "@/lib/grid";
+import {cameraSpawn} from "@/lib/constants";
+import {findPath, getFacingRotation, getInteraction, getInteractionAt, getShortestRotation} from "@/lib/grid";
 import {useGameInput} from "@/hooks/useGameInput";
 import usePlayerMovement, {STEP_MS} from "@/hooks/usePlayerMovement";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import {DIRECTIONS, INPUT_PRIORITY} from "@/lib/input";
 import {INTERACTION_SCREENS} from "@/components/screens/ScreenHost";
 import GridDebug from "@/components/GridDebug";
+import FloorPicker from "@/components/FloorPicker";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
@@ -29,7 +30,7 @@ export default function GameCanvas({ openScreen }) {
         () => typeof window !== "undefined" && window.location.search.includes("debug=grid"),
     );
 
-    const { tile, facing, isWalking, pressDirection, releaseDirection } = usePlayerMovement({
+    const { tile, facing, isWalking, pressDirection, releaseDirection, walkPath, face, getTile } = usePlayerMovement({
         onBump: collisionSoundPlay,
         onStep: (next) => setInteractionType(getInteractionAt(next)),
     });
@@ -75,9 +76,35 @@ export default function GameCanvas({ openScreen }) {
         { priority: INPUT_PRIORITY.GAME },
     );
 
+    // Click/tap an object: walk to the nearest tile it can be checked from,
+    // turn to face it, then open its screen.
     const handleClickInteraction = useCallback(
-        (type) => openScreen(INTERACTION_SCREENS[type]),
-        [openScreen],
+        (type) => {
+            const interaction = getInteraction(type);
+            const goals = interaction.positions.map(([x, y]) => ({ x, y }));
+            const path = findPath(getTile(), goals);
+            if (!path) {
+                collisionSoundPlay();
+                return;
+            }
+            walkPath(path, () => {
+                face(interaction.facing);
+                openScreen(INTERACTION_SCREENS[type]);
+            });
+        },
+        [getTile, walkPath, face, openScreen, collisionSoundPlay],
+    );
+
+    const handleFloorPick = useCallback(
+        (target) => {
+            const path = findPath(getTile(), [target]);
+            if (path) {
+                walkPath(path);
+            } else {
+                collisionSoundPlay();
+            }
+        },
+        [getTile, walkPath, collisionSoundPlay],
     );
 
     return (
@@ -85,8 +112,8 @@ export default function GameCanvas({ openScreen }) {
             <div className="absolute inset-0">
                 <Canvas camera={cameraSpawn}>
                     <Suspense fallback={null}>
+                        <FloorPicker onPick={handleFloorPick} />
                         <RoomModel
-                            interactions={interactions}
                             interactionType={interactionType}
                             onInteraction={handleClickInteraction}
                         />

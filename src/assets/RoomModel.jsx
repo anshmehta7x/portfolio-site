@@ -8,13 +8,20 @@
   Title: Pokemon FireRed - Player's Room
   */
 
-import React, { useRef, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 
 export function RoomModel(props) {
     const { nodes, materials } = useGLTF("/scene.gltf");
-    const { interactions, interactionType } = props;
+    const { interactionType, onInteraction, ...groupProps } = props;
     const [hovered, setHovered] = useState(null);
+
+    useEffect(() => {
+        document.body.style.cursor = hovered ? "pointer" : "";
+        return () => {
+            document.body.style.cursor = "";
+        };
+    }, [hovered]);
 
     // Returns the correct tinted material for a given interaction type
     const getInteractionMaterial = (type) => {
@@ -46,7 +53,7 @@ export function RoomModel(props) {
     const activeType = hovered || interactionType;
 
     return (
-        <group {...props} dispose={null}>
+        <group {...groupProps} dispose={null}>
             <mesh
                 castShadow
                 receiveShadow
@@ -73,10 +80,14 @@ export function RoomModel(props) {
             />
             <group
                 name="computer"
-                onClick={() => {
-                    props.onInteraction("computer");
+                onClick={(event) => {
+                    event.stopPropagation();
+                    onInteraction("computer");
                 }}
-                onPointerOver={() => setHovered("computer")}
+                onPointerOver={(event) => {
+                    event.stopPropagation();
+                    setHovered("computer");
+                }}
                 onPointerOut={() => setHovered(null)}
             >
                 <mesh
@@ -98,10 +109,14 @@ export function RoomModel(props) {
             />
             <group
                 name="television"
-                onClick={() => {
-                    props.onInteraction("television");
+                onClick={(event) => {
+                    event.stopPropagation();
+                    onInteraction("television");
                 }}
-                onPointerOver={() => setHovered("television")}
+                onPointerOver={(event) => {
+                    event.stopPropagation();
+                    setHovered("television");
+                }}
                 onPointerOut={() => setHovered(null)}
             >
                 <mesh
@@ -141,10 +156,14 @@ export function RoomModel(props) {
             />
             <group
                 name="bookshelf"
-                onClick={() => {
-                    props.onInteraction("bookshelf");
+                onClick={(event) => {
+                    event.stopPropagation();
+                    onInteraction("bookshelf");
                 }}
-                onPointerOver={() => setHovered("bookshelf")}
+                onPointerOver={(event) => {
+                    event.stopPropagation();
+                    setHovered("bookshelf");
+                }}
                 onPointerOut={() => setHovered(null)}
             >
                 <mesh
@@ -178,10 +197,14 @@ export function RoomModel(props) {
             />
             <group
                 name="certificate"
-                onClick={() => {
-                    props.onInteraction("certificate");
+                onClick={(event) => {
+                    event.stopPropagation();
+                    onInteraction("certificate");
                 }}
-                onPointerOver={() => setHovered("certificate")}
+                onPointerOver={(event) => {
+                    event.stopPropagation();
+                    setHovered("certificate");
+                }}
                 onPointerOut={() => setHovered(null)}
             >
                 <mesh
