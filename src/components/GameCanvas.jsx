@@ -141,7 +141,7 @@ export default function GameCanvas({ openScreen }) {
                     <TextBox
                         lines={[
                             ROOM_OBJECT_HINTS[interactionType],
-                            `${coarsePointer ? "Tap" : "Press"} A to check it.`,
+                            coarsePointer ? "Tap A to check it." : "Press Enter to check it.",
                         ]}
                         onActivate={handleInteract}
                     />
