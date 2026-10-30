@@ -7,22 +7,16 @@ export default function ContactModal({
     onClose,
     isConstrained = false,
 }) {
-    // Close modal on Escape key press
+    // Escape/B is handled by ScreenHost via the shared input layer.
     useEffect(() => {
-        const handleEscape = (e) => {
-            if (e.key === "Escape") onClose();
-        };
-
-        if (visibility) {
-            document.addEventListener("keydown", handleEscape);
-            document.body.style.overflow = "hidden"; // Prevent background scroll
+        if (!visibility) {
+            return undefined;
         }
-
+        document.body.style.overflow = "hidden"; // Prevent background scroll
         return () => {
-            document.removeEventListener("keydown", handleEscape);
             document.body.style.overflow = "unset";
         };
-    }, [visibility, onClose]);
+    }, [visibility]);
 
     const sectionClasses = isConstrained
         ? "absolute inset-0 w-full h-full flex justify-center items-center bg-black/70 backdrop-blur-sm z-50"

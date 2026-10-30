@@ -1,10 +1,24 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
+import { useGameInput } from "@/hooks/useGameInput";
+import { INPUT_PRIORITY } from "@/lib/input";
 
 // Updated project data to include the 'techStack' array for each project.
 // Tech stack for ScriptSync is from the resume. Others are based on their descriptions.
 const projectsData = [
+    {
+        title: "animatrix - AniMe Matrix control for Linux",
+        description:
+            "Control the ASUS ROG AniMe Matrix LED lid display on Linux: images, GIFs, video, text, clocks, a music visualiser and generative effects. An open-source alternative to Armoury Crate / G-Helper with a systemd daemon (D-Bus API), Electron tray app with live LED preview, CLI and TypeScript library.",
+        media: "/demo-images/animatrix.png",
+        mediaType: "image",
+        mediaFit: "contain",
+        liveUrl: "https://anshmehta7x.github.io/animatrix/",
+        liveUrlText: "Website",
+        githubUrl: "https://github.com/anshmehta7x/animatrix",
+        techStack: ["TypeScript", "Electron", "Node.js", "D-Bus", "systemd", "ffmpeg", "PipeWire"],
+    },
     {
         title: "ScriptSync - 1st Place @ VIT Hack",
         description:
@@ -96,22 +110,24 @@ export default function ProjectsModal({
         }, 400);
     }, [isChanging]);
 
-    // Allows keyboard navigation
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (!visibility) return;
-            if (e.key === "ArrowRight") {
-                handleNext();
-            } else if (e.key === "ArrowLeft") {
-                handlePrev();
+    // ←/→ (keyboard or D-pad) flip between projects; B still reaches the screen host.
+    useGameInput(
+        (event) => {
+            if (event.type !== "press") {
+                return false;
             }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [visibility, handleNext, handlePrev]);
+            if (event.button === "right") {
+                handleNext();
+                return true;
+            }
+            if (event.button === "left") {
+                handlePrev();
+                return true;
+            }
+            return false;
+        },
+        { priority: INPUT_PRIORITY.SCREEN_CONTENT, enabled: visibility, blocking: false },
+    );
 
     const currentProject = projectsData[currentIndex];
 
@@ -191,7 +207,7 @@ export default function ProjectsModal({
                                     loop
                                     muted
                                     playsInline
-                                    preload="auto"
+                                    preload="metadata"
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
@@ -199,7 +215,7 @@ export default function ProjectsModal({
                                     src={currentProject.media}
                                     alt={`${currentProject.title} screenshot`}
                                     fill={true}
-                                    className="w-full h-full object-cover"
+                                    className={`w-full h-full ${currentProject.mediaFit === "contain" ? "object-contain" : "object-cover"}`}
                                 />
                             )}
                         </div>

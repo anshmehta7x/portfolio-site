@@ -2,23 +2,25 @@ import {OrbitControls} from "@react-three/drei";
 import {Canvas} from "@react-three/fiber";
 import {RoomModel} from "@/assets/RoomModel";
 import {PlayerModel} from "@/assets/PlayerModel";
-import {Suspense, useCallback, useEffect, useState} from "react";
+import {Suspense, useCallback, useState} from "react";
 import {animated, useSpring} from "@react-spring/three";
 import useSound from "use-sound";
 import {FollowCamera, getOrientationFromDirection, getRelativeDirection, getShortestRotation} from "@/lib/cameraUtils";
 import {cameraSpawn, collisions, defaultOrientation, interactions, limits, playerSpawn} from "@/lib/constants";
+import {useGameInput} from "@/hooks/useGameInput";
+import {INPUT_PRIORITY} from "@/lib/input";
+import {INTERACTION_SCREENS} from "@/components/screens/ScreenHost";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
-export default function GameCanvas({
-    setAchievementsVisibility,
-    setResumeVisibility,
-    setSkillsVisibility,
-    gbaPress,
-    setGbaPress,
-    setProjectsVisibility,
-    setContactVisibility,
-}) {
+const SCREEN_FOR_BUTTON = {
+    start: "contact",
+    select: "help",
+};
+
+const DIRECTION_TO_MOVE = { up: "front", down: "back", left: "left", right: "right" };
+
+export default function GameCanvas({ openScreen }) {
     const [currX, setCurrX] = useState(playerSpawn[0]);
     const [currY, setCurrY] = useState(playerSpawn[1]);
     const [isMoving, setIsMoving] = useState(false);
@@ -49,24 +51,10 @@ export default function GameCanvas({
 
     const handleInteract = useCallback(() => {
         if (interactionType) {
-            if (interactionType === "certificate") {
-                setAchievementsVisibility((prevVisibility) => !prevVisibility);
-            } else if (interactionType === "computer") {
-                setResumeVisibility((prevVisibility) => !prevVisibility);
-            } else if (interactionType === "bookshelf") {
-                setSkillsVisibility((prevVisibility) => !prevVisibility);
-            } else if (interactionType === "television") {
-                setProjectsVisibility((prevVisibility) => !prevVisibility);
-            }
+            openScreen(INTERACTION_SCREENS[interactionType]);
             setInteractionType(null);
         }
-    }, [
-        interactionType,
-        setAchievementsVisibility,
-        setResumeVisibility,
-        setSkillsVisibility,
-        setProjectsVisibility,
-    ]);
+    }, [interactionType, openScreen]);
 
 
     const handleMove = useCallback(
@@ -126,10 +114,6 @@ export default function GameCanvas({
                         setInteractionType(null);
                     }
 
-                    setAchievementsVisibility(false);
-                    setResumeVisibility(false);
-                    setSkillsVisibility(false);
-
                     setTimeout(() => {
                         setIsMoving(false);
                     }, 400);
@@ -161,92 +145,41 @@ export default function GameCanvas({
             currY,
             currentDirection,
             isMoving,
-            setAchievementsVisibility,
-            setResumeVisibility,
-            setSkillsVisibility,
             collisionSoundPlay,
             checkInteractions,
             rot,
         ],
     );
 
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (isMoving) return;
-            switch (event.key) {
-                case "ArrowUp":
-                case "w":
-                    handleMove("front");
-                    break;
-                case "ArrowDown":
-                case "s":
-                    handleMove("back");
-                    break;
-                case "ArrowLeft":
-                case "a":
-                    handleMove("left");
-                    break;
-                case "ArrowRight":
-                case "d":
-                    handleMove("right");
-                    break;
-                case "Enter":
-                case "e":
-                    handleInteract();
-                    break;
-                default:
-                    break;
+    useGameInput(
+        (event) => {
+            if (event.type !== "press") {
+                return false;
             }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [handleMove, handleInteract, isMoving]);
-
-    useEffect(() => {
-        if (!gbaPress || isMoving) return;
-
-        switch (gbaPress) {
-            case "up":
-                handleMove("front");
-                break;
-            case "down":
-                handleMove("back");
-                break;
-            case "left":
-                handleMove("left");
-                break;
-            case "right":
-                handleMove("right");
-                break;
-            case "a":
+            const { button } = event;
+            if (DIRECTION_TO_MOVE[button]) {
+                handleMove(DIRECTION_TO_MOVE[button]);
+            } else if (button === "a") {
                 handleInteract();
-                break;
-            case "start":
-                setContactVisibility((prevVisibility) => !prevVisibility);
-            default:
-                break;
-        }
-        setGbaPress("");
-    }, [gbaPress, handleMove, handleInteract, setGbaPress, isMoving, setContactVisibility]);
+            } else if (SCREEN_FOR_BUTTON[button]) {
+                openScreen(SCREEN_FOR_BUTTON[button]);
+            }
+            return true;
+        },
+        { priority: INPUT_PRIORITY.GAME },
+    );
 
-    function handleClickInteraction(type) {
-        if (type === "certificate") {
-            setAchievementsVisibility((prevVisibility) => !prevVisibility);
-        } else if (type === "computer") {
-            setResumeVisibility((prevVisibility) => !prevVisibility);
-        } else if (type === "bookshelf") {
-            setSkillsVisibility((prevVisibility) => !prevVisibility);
-        } else if (type === "television") {
-            setProjectsVisibility((prevVisibility) => !prevVisibility);
-        }
-        setInteractionType(null);
-    }
+    const handleClickInteraction = useCallback(
+        (type) => {
+            openScreen(INTERACTION_SCREENS[type]);
+            setInteractionType(null);
+        },
+        [openScreen],
+    );
 
     return (
-        <section className="flex h-full w-full">
-            <div className="p-2 w-full md:h-[80vh] border-red-500">
+        <section className="relative h-full w-full">
+            <div className="absolute inset-0">
                 <Canvas camera={cameraSpawn}>
                     <OrbitControls enabled={false} />
                     <Suspense fallback={null}>
