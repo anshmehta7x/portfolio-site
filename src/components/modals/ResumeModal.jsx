@@ -1,15 +1,14 @@
 "use client";
 
+import { resume } from "@/data/contact";
+
 export default function ResumeModal({
     visibility,
     onClose,
     isConstrained = false,
 }) {
     const handleDownload = () => {
-        window.open(
-            "https://github.com/anshmehta7x/resume/blob/main/ansh-mehta-resume.pdf",
-            "_blank",
-        );
+        window.open(resume.href, "_blank");
     };
 
     const sectionClasses = isConstrained

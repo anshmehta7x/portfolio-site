@@ -19,15 +19,12 @@ import ControlsLegend from "@/components/hints/ControlsLegend";
 import TextBox from "@/components/ui/TextBox";
 import useCoarsePointer from "@/hooks/useCoarsePointer";
 import {ROOM_OBJECT_HINTS} from "@/data/roomObjects";
+import {useGameUI} from "@/hooks/GameUIProvider";
 
 const collisionsound = "/sounds/collisionsound.mp3";
 
-const SCREEN_FOR_BUTTON = {
-    start: "contact",
-    select: "help",
-};
-
-export default function GameCanvas({ openScreen }) {
+export default function GameCanvas() {
+    const { openScreen, openMenu } = useGameUI();
     const [interactionType, setInteractionType] = useState(null);
     const [collisionSoundPlay] = useSound(collisionsound);
     const reducedMotion = usePrefersReducedMotion();
@@ -74,8 +71,10 @@ export default function GameCanvas({ openScreen }) {
             }
             if (button === "a") {
                 handleInteract();
-            } else if (SCREEN_FOR_BUTTON[button]) {
-                openScreen(SCREEN_FOR_BUTTON[button]);
+            } else if (button === "start") {
+                openMenu();
+            } else if (button === "select") {
+                openScreen("help");
             }
             return true;
         },
