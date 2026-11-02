@@ -50,7 +50,7 @@ const limits = {
     y: [-2.5, 3.5],
 };
 
-const cameraSpawn = { position: [5, 5, 8], fov: 60 }
+const cameraSpawn = { position: [0.5, 9, 8], fov: 40 }
 
 const playerSpawn = [2.5,1.5] // x,y value to spawn player
 
