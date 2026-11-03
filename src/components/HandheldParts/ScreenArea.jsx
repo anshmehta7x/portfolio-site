@@ -12,7 +12,7 @@ export default function ScreenArea() {
                     <div className="relative flex-1 min-w-0">
                         <GameCanvas />
                     </div>
-                    <aside className="w-56 shrink-0 p-3 flex flex-col">
+                    <aside className="w-56 shrink-0 p-3 flex flex-col overflow-y-auto">
                         <StartMenu variant="panel" />
                     </aside>
                     <ScreenHost isConstrained />
