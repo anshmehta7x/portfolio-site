@@ -24,7 +24,7 @@ import {useGameUI} from "@/hooks/GameUIProvider";
 const collisionsound = "/sounds/collisionsound.mp3";
 
 export default function GameCanvas() {
-    const { openScreen, openMenu } = useGameUI();
+    const { openScreen, openMenu, intro } = useGameUI();
     const [interactionType, setInteractionType] = useState(null);
     const [collisionSoundPlay] = useSound(collisionsound);
     const reducedMotion = usePrefersReducedMotion();
@@ -134,7 +134,7 @@ export default function GameCanvas() {
                     </Suspense>
                 </Canvas>
             </div>
-            <ControlsLegend coarse={coarsePointer} hidden={!!interactionType && !isWalking} />
+            <ControlsLegend coarse={coarsePointer} hidden={!!intro || (!!interactionType && !isWalking)} />
             {interactionType && !isWalking && (
                 <div className="absolute inset-x-2 bottom-2 z-20 sm:inset-x-4 sm:bottom-4">
                     <TextBox

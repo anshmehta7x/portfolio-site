@@ -9,6 +9,7 @@ import PillButton from "@/components/controls/PillButton";
 import ScreenHost from "@/components/screens/ScreenHost";
 import StartMenu from "@/components/menu/StartMenu";
 import MenuChip from "@/components/menu/MenuChip";
+import IntroOverlay from "@/components/intro/IntroOverlay";
 
 // Portrait handheld used on phones. Screens open full-viewport on top of it.
 export default function GameBoy() {
@@ -21,6 +22,7 @@ export default function GameBoy() {
                         <GameCanvas />
                         <StartMenu />
                         <MenuChip />
+                        <IntroOverlay />
                     </div>
                 </div>
 
