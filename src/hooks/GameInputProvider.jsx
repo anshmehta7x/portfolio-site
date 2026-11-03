@@ -21,6 +21,11 @@ export default function GameInputProvider({ children }) {
         const layers = [...layersRef.current]
             .filter((layer) => layer.enabledRef.current)
             .sort((x, y) => y.priority - x.priority || y.order - x.order);
+        // Releases go to every layer so nothing stays "held" behind a menu.
+        if (event.type === "release") {
+            layers.forEach((layer) => layer.handlerRef.current?.(event));
+            return;
+        }
         for (const layer of layers) {
             const handled = layer.handlerRef.current?.(event) === true;
             if (handled || layer.blocking) {
