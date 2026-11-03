@@ -7,19 +7,16 @@ import { useGameUI } from "@/hooks/GameUIProvider";
 
 // Created once at module scope so a screen keeps its state across re-renders.
 const SCREENS = {
-    achievements: lazy(() => import("@/components/modals/AchievementsModal")),
-    resume: lazy(() => import("@/components/modals/ResumeModal")),
-    skills: lazy(() => import("@/components/modals/SkillsModal")),
-    projects: lazy(() => import("@/components/modals/ProjectsModal")),
-    contact: lazy(() => import("@/components/modals/ContactModal")),
-    help: lazy(() => import("@/components/modals/HelpModal")),
-    // Contact + resume until the full Trainer Card screen lands.
-    trainer: lazy(() => import("@/components/modals/ContactModal")),
+    achievements: lazy(() => import("@/components/screens/BadgeCaseScreen")),
+    skills: lazy(() => import("@/components/screens/MovesScreen")),
+    projects: lazy(() => import("@/components/screens/PokedexScreen")),
+    trainer: lazy(() => import("@/components/screens/TrainerCardScreen")),
+    help: lazy(() => import("@/components/screens/OptionsScreen")),
 };
 
 // Map of room objects to the screen they open.
 export const INTERACTION_SCREENS = {
-    computer: "resume",
+    computer: "trainer",
     bookshelf: "skills",
     television: "projects",
     certificate: "achievements",
@@ -45,7 +42,7 @@ export default function ScreenHost({ isConstrained = false }) {
 
     return (
         <Suspense fallback={<div className="text-white font-pixeboy p-4">Loading...</div>}>
-            <Screen visibility onClose={onClose} isConstrained={isConstrained} />
+            <Screen onClose={onClose} isConstrained={isConstrained} />
         </Suspense>
     );
 }
