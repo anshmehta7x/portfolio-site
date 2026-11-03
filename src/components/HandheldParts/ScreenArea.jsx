@@ -1,13 +1,20 @@
 import GameCanvas from "@/components/GameCanvas";
 import ScreenHost from "@/components/screens/ScreenHost";
+import StartMenu from "@/components/menu/StartMenu";
 
-export default function ScreenArea({ screen, openScreen, closeScreen }) {
+// Desktop screen: the room plus an always-visible START menu column.
+export default function ScreenArea() {
     return (
         <div className="flex-1 h-full min-w-0 flex flex-col items-center justify-center mx-6">
             <div className="w-full flex-1 min-h-0 bg-bezel rounded-2xl p-6 border-4 border-bezel-light shadow-[inset_0_2px_0_rgba(255,255,255,0.08)]">
-                <div className="relative w-full h-full bg-black rounded-md overflow-hidden">
-                    <GameCanvas openScreen={openScreen} />
-                    <ScreenHost screen={screen} onClose={closeScreen} isConstrained />
+                <div className="relative w-full h-full bg-black rounded-md overflow-hidden flex">
+                    <div className="relative flex-1 min-w-0">
+                        <GameCanvas />
+                    </div>
+                    <aside className="w-56 shrink-0 p-3 flex flex-col">
+                        <StartMenu variant="panel" />
+                    </aside>
+                    <ScreenHost isConstrained />
                 </div>
             </div>
             <div aria-hidden="true" className="flex gap-3 mt-5">

@@ -1,6 +1,13 @@
 "use client";
 import { useEffect } from "react";
-import { Mail, Linkedin, Github } from "lucide-react";
+import { Mail, Linkedin, Github, FileText } from "lucide-react";
+import { contactLinks, resume } from "@/data/contact";
+
+const ICONS = { Mail, Linkedin, Github, FileText };
+const LINKS = [
+    ...contactLinks,
+    { label: "Resume", href: resume.href, display: resume.label, icon: "FileText" },
+];
 
 export default function ContactModal({
     visibility,
@@ -26,26 +33,7 @@ export default function ContactModal({
         ? "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 border border-slate-600/50 rounded-2xl shadow-2xl w-full h-full flex flex-col backdrop-blur-xl"
         : "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 border border-slate-600/50 rounded-2xl shadow-2xl w-full max-w-md backdrop-blur-xl transform transition-all duration-300 ease-out";
 
-    const contactLinks = [
-        {
-            label: "Email",
-            href: "mailto:anshkapilmehta@gmail.com",
-            display: "anshkapilmehta@gmail.com",
-            icon: <Mail color="white" />,
-        },
-        {
-            label: "LinkedIn",
-            href: "https://linkedin.com/in/anshmehta",
-            display: "linkedin.com/in/anshmehta",
-            icon: <Linkedin color="white" />,
-        },
-        {
-            label: "GitHub",
-            href: "https://github.com/anshmehta7x",
-            display: "github.com/anshmehta7x",
-            icon: <Github color="white" />,
-        },
-    ];
+
 
     return (
         <section
@@ -91,7 +79,7 @@ export default function ContactModal({
 
                     {/* Contact Links */}
                     <div className="space-y-4">
-                        {contactLinks.map((link, index) => (
+                        {LINKS.map((link, index) => (
                             <div
                                 key={link.label}
                                 className="group relative"
@@ -105,7 +93,10 @@ export default function ContactModal({
                                 <div className="relative p-4 rounded-xl border border-slate-700/50 bg-slate-800/30 group-hover:border-slate-600/80 transition-all duration-300 group-hover:transform group-hover:scale-[1.02]">
                                     <div className="flex items-center space-x-3">
                                         <div className="text-2xl md:mr-6 md:ml-6">
-                                            {link.icon}
+                                            {(() => {
+                                                const Icon = ICONS[link.icon];
+                                                return <Icon color="white" />;
+                                            })()}
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-slate-300 font-arcade text-lg md:text-3xl mb-1">
